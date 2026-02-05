@@ -62,6 +62,10 @@
             color: #68d391;
         }
         
+        .stat-value.errors {
+            color: #fc8181;
+        }
+        
         .staff-container {
             padding: 30px;
             background: #f7fafc;
@@ -84,6 +88,28 @@
             color: #4a5568;
         }
         
+        .clef-selector {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .clef-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            background: #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .clef-btn.active {
+            background: #4a5568;
+            color: white;
+        }
+        
         .piano-container {
             background: #2d3748;
             padding: 30px;
@@ -93,7 +119,7 @@
         .piano {
             position: relative;
             width: 100%;
-            height: 200px;
+            height: 180px;
             background: #1a202c;
             border-radius: 10px;
             overflow: hidden;
@@ -106,32 +132,39 @@
         
         .white-key {
             flex: 1;
-            background: white;
-            border: 1px solid #cbd5e0;
-            border-radius: 0 0 5px 5px;
+            background: linear-gradient(to bottom, #ffffff 0%, #f8f9fa 100%);
+            border: 1px solid #e2e8f0;
+            border-left: none;
+            border-radius: 0 0 4px 4px;
             position: relative;
             cursor: pointer;
             transition: all 0.1s;
             display: flex;
             align-items: flex-end;
             justify-content: center;
-            padding-bottom: 20px;
+            padding-bottom: 15px;
             font-weight: bold;
-            color: #2d3748;
+            color: rgba(45, 55, 72, 0.4); /* Черный с прозрачностью 0.4 */
             user-select: none;
+            font-size: 14px;
+            min-width: 40px;
+        }
+        
+        .white-key:first-child {
+            border-left: 1px solid #e2e8f0;
         }
         
         .white-key:hover {
-            background: #f7fafc;
+            background: linear-gradient(to bottom, #f7fafc 0%, #edf2f7 100%);
         }
         
         .white-key.active {
-            background: #68d391;
+            background: linear-gradient(to bottom, #48bb78 0%, #38a169 100%);
             transform: translateY(2px);
         }
         
         .white-key.wrong {
-            background: #fc8181;
+            background: linear-gradient(to bottom, #fc8181 0%, #f56565 100%);
             transform: translateY(2px);
         }
         
@@ -146,9 +179,9 @@
         
         .black-key {
             position: absolute;
-            width: 8%;
-            height: 100%;
-            background: #2d3748;
+            width: 7%; /* Уже чем раньше */
+            height: 65%; /* Выше чем раньше */
+            background: linear-gradient(to bottom, #2d3748 0%, #1a202c 100%);
             border: 1px solid #4a5568;
             border-radius: 0 0 3px 3px;
             cursor: pointer;
@@ -157,23 +190,24 @@
             display: flex;
             align-items: flex-end;
             justify-content: center;
-            padding-bottom: 10px;
-            color: white;
-            font-size: 12px;
+            padding-bottom: 8px;
+            color: rgba(255, 255, 255, 0.5); /* Белый с прозрачностью 0.5 */
+            font-size: 10px;
             transition: all 0.1s;
+            min-width: 25px;
         }
         
         .black-key:hover {
-            background: #4a5568;
+            background: linear-gradient(to bottom, #4a5568 0%, #2d3748 100%);
         }
         
         .black-key.active {
-            background: #68d391;
+            background: linear-gradient(to bottom, #48bb78 0%, #38a169 100%);
             transform: translateY(2px);
         }
         
         .black-key.wrong {
-            background: #fc8181;
+            background: linear-gradient(to bottom, #fc8181 0%, #f56565 100%);
             transform: translateY(2px);
         }
         
@@ -197,6 +231,25 @@
             margin: 0 10px;
         }
         
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            min-height: 40px;
+        }
+        
+        .feedback.correct {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .feedback.wrong {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+        
         @media (max-width: 600px) {
             .container {
                 margin: 10px;
@@ -211,9 +264,19 @@
                 padding: 15px;
             }
             
+            .piano {
+                height: 150px;
+            }
+            
             .white-key {
-                padding-bottom: 10px;
-                font-size: 14px;
+                padding-bottom: 8px;
+                font-size: 12px;
+                min-width: 30px;
+            }
+            
+            .black-key {
+                font-size: 8px;
+                min-width: 20px;
             }
         }
     </style>
@@ -229,7 +292,7 @@
                 </div>
                 <div class="stat">
                     <div>Ошибок</div>
-                    <div class="stat-value" id="errorCount">0</div>
+                    <div class="stat-value errors" id="errorCount">0</div>
                 </div>
                 <div class="stat">
                     <div>Всего</div>
@@ -244,6 +307,11 @@
                 Найди эту ноту на клавишах ниже:
                 <span id="currentNote" class="note-name">?</span>
             </div>
+            <div class="clef-selector">
+                <button class="clef-btn active" onclick="setClef('treble')">Скрипичный ключ</button>
+                <button class="clef-btn" onclick="setClef('bass')">Басовый ключ</button>
+            </div>
+            <div id="feedback" class="feedback"></div>
         </div>
         
         <div class="piano-container">
@@ -266,20 +334,19 @@
 
     <script>
         // ========== КОНФИГУРАЦИЯ ==========
-        const OCTAVE_NOTES = ['C', 'D', 'E', 'F', 'G', 'A', 'B']; // Одна октава
-        const OCTAVE_NUMBER = 4; // 4-я октава (средняя)
+        const OCTAVE_NOTES = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+        const OCTAVE_NUMBER = 4;
         
-        // Позиции нот на нотном стане для скрипичного ключа (от нижней линии)
-        const NOTE_POSITIONS = {
-            'E4': 1,   // 1-я линия
-            'F4': 2,   // Между 1-2
-            'G4': 3,   // 2-я линия
-            'A4': 4,   // Между 2-3
-            'B4': 5,   // 3-я линия
-            'C5': 6,   // Между 3-4
-            'D5': 7,   // 4-я линия
-            'E5': 8,   // Между 4-5
-            'F5': 9    // 5-я линия
+        // Позиции нот для скрипичного ключа
+        const TREBLE_POSITIONS = {
+            'E4': 1, 'F4': 2, 'G4': 3, 'A4': 4, 'B4': 5,
+            'C5': 6, 'D5': 7, 'E5': 8, 'F5': 9
+        };
+        
+        // Позиции нот для басового ключа
+        const BASS_POSITIONS = {
+            'G2': 1, 'A2': 2, 'B2': 3, 'C3': 4, 'D3': 5,
+            'E3': 6, 'F3': 7, 'G3': 8, 'A3': 9
         };
         
         // ========== ПЕРЕМЕННЫЕ ==========
@@ -287,10 +354,48 @@
         let correctCount = 0;
         let errorCount = 0;
         let totalCount = 0;
+        let currentClef = 'treble'; // 'treble' или 'bass'
+        let notePositions = TREBLE_POSITIONS;
+        let clefImage = null;
+        let bassClefImage = null;
         
         // ========== НОТНЫЙ СТАН ==========
         const canvas = document.getElementById('staffCanvas');
         const ctx = canvas.getContext('2d');
+        
+        // Загрузка изображений ключей
+        function loadImages() {
+            return new Promise((resolve) => {
+                clefImage = new Image();
+                bassClefImage = new Image();
+                
+                let loaded = 0;
+                const checkLoaded = () => {
+                    loaded++;
+                    if (loaded === 2) resolve();
+                };
+                
+                clefImage.onload = checkLoaded;
+                bassClefImage.onload = checkLoaded;
+                
+                // Используем ваши изображения
+                clefImage.src = '1.png';
+                bassClefImage.src = '2.png';
+                
+                // Fallback на рисование, если изображения не загрузились
+                clefImage.onerror = () => {
+                    console.log('Не удалось загрузить скрипичный ключ, использую рисование');
+                    clefImage = null;
+                    checkLoaded();
+                };
+                
+                bassClefImage.onerror = () => {
+                    console.log('Не удалось загрузить басовый ключ, использую рисование');
+                    bassClefImage = null;
+                    checkLoaded();
+                };
+            });
+        }
         
         // Устанавливаем размеры canvas
         function resizeCanvas() {
@@ -319,40 +424,86 @@
                 ctx.stroke();
             }
             
-            // Рисуем скрипичный ключ (упрощенный)
-            drawTrebleClef(startY + lineSpacing); // На второй линии
+            // Рисуем выбранный ключ
+            drawClef(startY);
         }
         
-        // Рисуем скрипичный ключ
+        // Рисуем музыкальный ключ
+        function drawClef(startY) {
+            const lineSpacing = 20;
+            
+            if (currentClef === 'treble') {
+                // Скрипичный ключ
+                if (clefImage && clefImage.complete && clefImage.naturalWidth > 0) {
+                    // Используем изображение
+                    const height = lineSpacing * 4;
+                    const width = height * (clefImage.width / clefImage.height);
+                    ctx.drawImage(clefImage, 40, startY - height * 0.3, width, height);
+                } else {
+                    // Рисуем скрипичный ключ вручную
+                    drawTrebleClef(startY + lineSpacing);
+                }
+            } else {
+                // Басовый ключ
+                if (bassClefImage && bassClefImage.complete && bassClefImage.naturalWidth > 0) {
+                    // Используем изображение
+                    const height = lineSpacing * 3;
+                    const width = height * (bassClefImage.width / bassClefImage.height);
+                    ctx.drawImage(bassClefImage, 40, startY + lineSpacing * 0.5, width, height);
+                } else {
+                    // Рисуем басовый ключ вручную
+                    drawBassClef(startY + lineSpacing * 2);
+                }
+            }
+        }
+        
+        // Рисуем скрипичный ключ вручную (запасной вариант)
         function drawTrebleClef(y) {
             ctx.save();
             ctx.strokeStyle = '#2d3748';
             ctx.lineWidth = 3;
             
-            // Упрощенный скрипичный ключ
             ctx.beginPath();
-            // Верхняя часть
             ctx.moveTo(70, y - 40);
             ctx.bezierCurveTo(60, y - 30, 50, y, 60, y + 20);
-            // Нижняя часть
             ctx.bezierCurveTo(65, y + 30, 75, y + 15, 80, y);
-            // Завершение
             ctx.bezierCurveTo(85, y - 15, 80, y - 25, 70, y - 40);
             ctx.stroke();
             
-            // Маленькая петелька
             ctx.beginPath();
             ctx.arc(75, y + 10, 5, 0, Math.PI * 2);
             ctx.stroke();
+            ctx.restore();
+        }
+        
+        // Рисуем басовый ключ вручную (запасной вариант)
+        function drawBassClef(y) {
+            ctx.save();
+            ctx.strokeStyle = '#2d3748';
+            ctx.lineWidth = 3;
             
+            // Басовый ключ (упрощенный)
+            ctx.beginPath();
+            // Точка
+            ctx.arc(70, y, 3, 0, Math.PI * 2);
+            ctx.fill();
+            // Изгиб
+            ctx.beginPath();
+            ctx.moveTo(70, y - 15);
+            ctx.bezierCurveTo(60, y - 5, 65, y + 10, 70, y + 15);
+            ctx.stroke();
+            // Вторая точка
+            ctx.beginPath();
+            ctx.arc(75, y + 5, 2, 0, Math.PI * 2);
+            ctx.fill();
             ctx.restore();
         }
         
         // Рисуем ноту на стане
         function drawNote() {
-            if (!currentNote || !NOTE_POSITIONS[currentNote]) return;
+            if (!currentNote || !notePositions[currentNote]) return;
             
-            const position = NOTE_POSITIONS[currentNote];
+            const position = notePositions[currentNote];
             const lineSpacing = 20;
             const startY = (canvas.height - lineSpacing * 4) / 2;
             
@@ -373,7 +524,7 @@
             ctx.ellipse(200, noteY, 15, 10, 0, 0, Math.PI * 2);
             ctx.fill();
             
-            // Штиль (если нота выше третьей линии - штиль вниз)
+            // Штиль
             const stemDirection = noteY < startY + lineSpacing * 2 ? 'down' : 'up';
             const stemLength = 35;
             
@@ -398,7 +549,6 @@
             const whiteKeysContainer = document.getElementById('whiteKeys');
             const blackKeysContainer = document.getElementById('blackKeys');
             
-            // Очищаем контейнеры
             whiteKeysContainer.innerHTML = '';
             blackKeysContainer.innerHTML = '';
             
@@ -414,15 +564,13 @@
                 whiteKeysContainer.appendChild(key);
             });
             
-            // Создаем черные клавиши (только там, где они есть)
+            // Создаем черные клавиши
             const blackKeyPositions = [
-                { note: 'C#4', pos: 8.5 },   // После C
-                { note: 'D#4', pos: 24.5 },  // После D
-                // E нет черной клавиши
-                { note: 'F#4', pos: 55.5 },  // После F
-                { note: 'G#4', pos: 71.5 },  // После G
-                { note: 'A#4', pos: 87.5 }   // После A
-                // B нет черной клавиши
+                { note: 'C#4', pos: 8.5 },
+                { note: 'D#4', pos: 24.5 },
+                { note: 'F#4', pos: 55.5 },
+                { note: 'G#4', pos: 71.5 },
+                { note: 'A#4', pos: 87.5 }
             ];
             
             blackKeyPositions.forEach(({ note, pos }) => {
@@ -439,29 +587,53 @@
         }
         
         // ========== ЛОГИКА ИГРЫ ==========
-        // Генерируем случайную ноту
-        function generateRandomNote() {
-            // Для упрощения используем только белые клавиши
-            const randomIndex = Math.floor(Math.random() * OCTAVE_NOTES.length);
-            currentNote = OCTAVE_NOTES[randomIndex] + (OCTAVE_NUMBER + 1);
+        // Устанавливаем ключ
+        function setClef(clef) {
+            currentClef = clef;
+            notePositions = clef === 'treble' ? TREBLE_POSITIONS : BASS_POSITIONS;
             
-            // Если нота слишком высокая для нашего стана, используем октаву ниже
-            if (!NOTE_POSITIONS[currentNote]) {
-                currentNote = OCTAVE_NOTES[randomIndex] + OCTAVE_NUMBER;
-            }
+            // Обновляем активную кнопку
+            document.querySelectorAll('.clef-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.onclick.toString().includes(clef)) {
+                    btn.classList.add('active');
+                }
+            });
             
-            document.getElementById('currentNote').textContent = '?';
-            drawStaff();
-            drawNote();
-            updateStats();
+            // Генерируем новую ноту в пределах нового ключа
+            generateRandomNote();
         }
         
-        // Проверяем ответ
+        // Генерируем случайную ноту
+        function generateRandomNote() {
+            const notes = Object.keys(notePositions);
+            const randomIndex = Math.floor(Math.random() * notes.length);
+            currentNote = notes[randomIndex];
+            
+            document.getElementById('currentNote').textContent = '?';
+            document.getElementById('feedback').innerHTML = '';
+            document.getElementById('feedback').className = 'feedback';
+            
+            drawStaff();
+            drawNote();
+        }
+        
+        // Проверяем ответ (ИСПРАВЛЕННЫЙ МЕТОД!)
         function checkAnswer(selectedNote, keyElement) {
             totalCount++;
             
-            // Сравниваем ноты (игнорируем диез для белых клавиш)
-            const isCorrect = selectedNote.replace('#', '') === currentNote;
+            // Нормализуем ноты для сравнения
+            const normalizeNote = (note) => {
+                // Убираем диез и октаву для сравнения
+                const baseNote = note.replace('#', '');
+                // Сравниваем только базовые ноты (C, D, E, etc.)
+                return baseNote.slice(0, -1);
+            };
+            
+            const selectedBase = normalizeNote(selectedNote);
+            const currentBase = normalizeNote(currentNote);
+            
+            const isCorrect = selectedBase === currentBase;
             
             if (isCorrect) {
                 correctCount++;
@@ -470,21 +642,57 @@
                 // Показываем правильное название ноты
                 document.getElementById('currentNote').textContent = currentNote;
                 
+                // Показываем сообщение
+                const feedback = document.getElementById('feedback');
+                feedback.textContent = `✅ Правильно! Это нота ${currentNote}`;
+                feedback.className = 'feedback correct';
+                
                 // Через секунду генерируем новую ноту
                 setTimeout(() => {
                     keyElement.classList.remove('active');
                     generateRandomNote();
-                }, 1000);
+                }, 1500);
             } else {
                 errorCount++;
                 keyElement.classList.add('wrong');
                 
+                // Показываем сообщение об ошибке
+                const feedback = document.getElementById('feedback');
+                feedback.textContent = `❌ Неправильно! Это была нота ${currentNote}`;
+                feedback.className = 'feedback wrong';
+                
+                // Подсвечиваем правильную клавишу ЗЕЛЕНЫМ
+                highlightCorrectKey();
+                
                 setTimeout(() => {
                     keyElement.classList.remove('wrong');
-                }, 500);
+                    clearHighlights();
+                    generateRandomNote();
+                }, 2000);
             }
             
             updateStats();
+        }
+        
+        // Подсвечиваем правильную клавишу зеленым
+        function highlightCorrectKey() {
+            const allKeys = document.querySelectorAll('.white-key, .black-key');
+            allKeys.forEach(key => {
+                const note = key.dataset.note;
+                if (note && note.replace('#', '') === currentNote) {
+                    key.classList.add('active');
+                }
+            });
+        }
+        
+        // Очищаем подсветку клавиш
+        function clearHighlights() {
+            document.querySelectorAll('.white-key.active, .black-key.active').forEach(key => {
+                key.classList.remove('active');
+            });
+            document.querySelectorAll('.white-key.wrong, .black-key.wrong').forEach(key => {
+                key.classList.remove('wrong');
+            });
         }
         
         // Обновляем статистику
@@ -495,7 +703,10 @@
         }
         
         // ========== ИНИЦИАЛИЗАЦИЯ ==========
-        window.addEventListener('load', () => {
+        window.addEventListener('load', async () => {
+            // Загружаем изображения
+            await loadImages();
+            
             resizeCanvas();
             createPiano();
             generateRandomNote();
@@ -506,9 +717,16 @@
             // PWA функционал
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('Service Worker зарегистрирован'))
-                    .catch(err => console.log('Ошибка:', err));
+                    .then(reg => {
+                        console.log('Service Worker зарегистрирован, версия:', reg);
+                        // Принудительное обновление SW при каждом запуске
+                        reg.update();
+                    })
+                    .catch(err => console.log('Ошибка SW:', err));
             }
+            
+            // Принудительная перезагрузка кэша
+            caches.delete('piano-notes-v1.1').catch(() => {});
         });
     </script>
 </body>
