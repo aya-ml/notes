@@ -194,6 +194,7 @@
         .white-keys {
             display: flex;
             height: 100%;
+            position: relative;
         }
         
         .white-key {
@@ -216,6 +217,7 @@
             min-width: 45px;
             font-family: 'Nunito', sans-serif;
             height: 100%;
+            z-index: 1;
         }
         
         .white-key:first-child {
@@ -247,7 +249,7 @@
         
         .black-key {
             position: absolute;
-            width: 6.2%; /* Точнее для расположения между белыми */
+            width: 7%;
             height: 65%;
             background: linear-gradient(to bottom, #1a202c 0%, #2d3748 100%);
             border: 1px solid #4a5568;
@@ -259,8 +261,8 @@
             align-items: flex-end;
             justify-content: center;
             padding-bottom: 8px;
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 11px;
+            color: rgba(255, 255, 255, 0);
+            font-size: 0;
             transition: all 0.1s;
             min-width: 28px;
             font-family: 'Nunito', sans-serif;
@@ -331,8 +333,9 @@
             }
             
             .black-key {
-                font-size: 10px;
+                font-size: 0;
                 min-width: 22px;
+                width: 6%;
             }
             
             .current-task {
@@ -418,31 +421,31 @@
         const OCTAVE_NOTES = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
         const OCTAVE_NUMBER = 4;
         
-        // Correct positions for treble clef (G clef on SECOND line from bottom)
-        // Bottom line is position 1, between lines is position 2, etc.
+        // CORRECT positions for treble clef (counting from BOTTOM to TOP)
+        // Line 1 (bottom) = E4, Between 1-2 = F4, Line 2 = G4, etc.
         const TREBLE_POSITIONS = {
-            'E4': 9,  // Top line (position 9)
-            'F4': 8,  // Between 4-5
-            'G4': 7,  // 4th line
-            'A4': 6,  // Between 3-4
-            'B4': 5,  // 3rd line (middle)
-            'C5': 4,  // Between 2-3
-            'D5': 3,  // 2nd line (G clef sits here)
-            'E5': 2,  // Between 1-2
-            'F5': 1   // 1st line (bottom)
+            'E4': 1,   // Line 1 (bottom) - Ми
+            'F4': 2,   // Between 1-2 - Фа
+            'G4': 3,   // Line 2 - Соль (where treble clef sits)
+            'A4': 4,   // Between 2-3 - Ля
+            'B4': 5,   // Line 3 (middle) - Си
+            'C5': 6,   // Between 3-4 - До
+            'D5': 7,   // Line 4 - Ре
+            'E5': 8,   // Between 4-5 - Ми
+            'F5': 9    // Line 5 (top) - Фа
         };
         
-        // Positions for bass clef (F clef on FOURTH line from bottom)
+        // CORRECT positions for bass clef (counting from BOTTOM to TOP)
         const BASS_POSITIONS = {
-            'G2': 9,  // Top line
-            'A2': 8,  // Between 4-5
-            'B2': 7,  // 4th line (F clef sits here)
-            'C3': 6,  // Between 3-4
-            'D3': 5,  // 3rd line
-            'E3': 4,  // Between 2-3
-            'F3': 3,  // 2nd line
-            'G3': 2,  // Between 1-2
-            'A3': 1   // 1st line (bottom)
+            'G2': 1,   // Line 1 (bottom) - Соль
+            'A2': 2,   // Between 1-2 - Ля
+            'B2': 3,   // Line 2 - Си
+            'C3': 4,   // Between 2-3 - До
+            'D3': 5,   // Line 3 (middle) - Ре
+            'E3': 6,   // Between 3-4 - Ми
+            'F3': 7,   // Line 4 - Фа (where bass clef sits)
+            'G3': 8,   // Between 4-5 - Соль
+            'A3': 9    // Line 5 (top) - Ля
         };
         
         // ========== VARIABLES ==========
@@ -515,7 +518,7 @@
         function drawStaff() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            const lineSpacing = 22; // Slightly more space
+            const lineSpacing = 22;
             const staffHeight = lineSpacing * 4;
             const startY = (canvas.height - staffHeight) / 2;
             
@@ -531,31 +534,33 @@
                 ctx.stroke();
             }
             
-            // Draw the clef
+            // Draw the clef (CORRECT POSITION)
             drawClef(startY, lineSpacing);
         }
         
-        // Draw the clef
+        // Draw the clef at CORRECT position
         function drawClef(startY, lineSpacing) {
             if (currentClef === 'treble') {
-                // Treble clef (G clef) should be on SECOND line from bottom
+                // Treble clef (G clef) should be on SECOND line from BOTTOM
+                const trebleLineY = startY + lineSpacing; // Line 2 from bottom
                 if (clefImage && clefImage.complete && clefImage.naturalWidth > 0) {
-                    const clefHeight = lineSpacing * 4.5;
+                    const clefHeight = lineSpacing * 4;
                     const clefWidth = clefHeight * (clefImage.width / clefImage.height);
-                    const clefY = startY + lineSpacing - clefHeight * 0.4; // Positioned around 2nd line
+                    const clefY = trebleLineY - clefHeight * 0.8; // Position around 2nd line
                     ctx.drawImage(clefImage, 50, clefY, clefWidth, clefHeight);
                 } else {
-                    drawTrebleClef(startY + lineSpacing); // 2nd line
+                    drawTrebleClef(trebleLineY);
                 }
             } else {
-                // Bass clef (F clef) should be on FOURTH line from bottom
+                // Bass clef (F clef) should be on FOURTH line from BOTTOM
+                const bassLineY = startY + lineSpacing * 3; // Line 4 from bottom
                 if (bassClefImage && bassClefImage.complete && bassClefImage.naturalWidth > 0) {
                     const clefHeight = lineSpacing * 3;
                     const clefWidth = clefHeight * (bassClefImage.width / bassClefImage.height);
-                    const clefY = startY + lineSpacing * 2 - clefHeight * 0.3; // Positioned around 4th line
+                    const clefY = bassLineY - clefHeight * 0.6; // Position around 4th line
                     ctx.drawImage(bassClefImage, 50, clefY, clefWidth, clefHeight);
                 } else {
-                    drawBassClef(startY + lineSpacing * 3); // 4th line
+                    drawBassClef(bassLineY);
                 }
             }
         }
@@ -567,14 +572,14 @@
             ctx.lineWidth = 3;
             
             ctx.beginPath();
-            ctx.moveTo(70, y - 45);
-            ctx.bezierCurveTo(60, y - 35, 50, y - 5, 60, y + 15);
-            ctx.bezierCurveTo(65, y + 25, 75, y + 10, 80, y - 5);
-            ctx.bezierCurveTo(85, y - 20, 80, y - 30, 70, y - 45);
+            ctx.moveTo(70, y - 40);
+            ctx.bezierCurveTo(60, y - 30, 50, y, 60, y + 20);
+            ctx.bezierCurveTo(65, y + 30, 75, y + 15, 80, y);
+            ctx.bezierCurveTo(85, y - 15, 80, y - 25, 70, y - 40);
             ctx.stroke();
             
             ctx.beginPath();
-            ctx.arc(75, y + 5, 5, 0, Math.PI * 2);
+            ctx.arc(75, y + 10, 5, 0, Math.PI * 2);
             ctx.stroke();
             ctx.restore();
         }
@@ -590,17 +595,17 @@
             ctx.fill();
             
             ctx.beginPath();
-            ctx.moveTo(70, y - 20);
-            ctx.bezierCurveTo(60, y - 10, 65, y + 5, 70, y + 10);
+            ctx.moveTo(70, y - 15);
+            ctx.bezierCurveTo(60, y - 5, 65, y + 10, 70, y + 15);
             ctx.stroke();
             
             ctx.beginPath();
-            ctx.arc(75, y, 2, 0, Math.PI * 2);
+            ctx.arc(75, y + 5, 2, 0, Math.PI * 2);
             ctx.fill();
             ctx.restore();
         }
         
-        // Draw note on staff
+        // Draw note on staff (CORRECT POSITION - counting from BOTTOM)
         function drawNote() {
             if (!currentNote || !notePositions[currentNote]) return;
             
@@ -609,23 +614,33 @@
             const staffHeight = lineSpacing * 4;
             const startY = (canvas.height - staffHeight) / 2;
             
-            // Calculate Y coordinate (correctly inverted)
+            // Calculate Y coordinate (CORRECT - from BOTTOM to TOP)
             let noteY;
-            if (position % 2 === 1) { // On a line
-                noteY = startY + (5 - Math.ceil(position / 2)) * lineSpacing;
-            } else { // Between lines
-                noteY = startY + (5 - position / 2) * lineSpacing - lineSpacing / 2;
+            if (position % 2 === 1) { // On a line (1, 3, 5, 7, 9)
+                // Line positions: 1=bottom, 3=line2, 5=middle, 7=line4, 9=top
+                const lineNumber = Math.floor((position + 1) / 2) - 1;
+                noteY = startY + lineNumber * lineSpacing;
+            } else { // Between lines (2, 4, 6, 8)
+                const betweenNumber = position / 2 - 1;
+                noteY = startY + betweenNumber * lineSpacing + lineSpacing / 2;
             }
             
             // Draw note using image or drawing
             if (noteImage && noteImage.complete && noteImage.naturalWidth > 0) {
                 // Use note image (3.png)
-                const noteWidth = 25; // Narrower
-                const noteHeight = 40; // Longer
-                ctx.drawImage(noteImage, 220, noteY - noteHeight/2, noteWidth, noteHeight);
+                const noteWidth = 20; // Narrow
+                const noteHeight = 35; // Long
+                const noteX = 220;
+                
+                // Determine stem direction (down for low notes, up for high notes)
+                const stemDirection = position <= 5 ? 'down' : 'up';
+                
+                // Draw note image
+                ctx.drawImage(noteImage, noteX, noteY - noteHeight/2, noteWidth, noteHeight);
                 
                 // Draw stem
-                drawStem(220 + noteWidth, noteY, position);
+                drawStem(noteX + (stemDirection === 'down' ? noteWidth : 0), 
+                        noteY, stemDirection);
             } else {
                 // Draw note manually
                 drawNoteManually(220, noteY, position);
@@ -636,33 +651,33 @@
         function drawNoteManually(x, y, position) {
             ctx.save();
             
-            // Note oval - narrower and longer
+            // Note oval - narrow and long
             ctx.fillStyle = '#4a5568';
             ctx.beginPath();
-            ctx.ellipse(x + 12, y, 10, 18, 0, 0, Math.PI * 2); // 10x18 instead of 15x10
+            ctx.ellipse(x + 10, y, 8, 16, 0, 0, Math.PI * 2);
             ctx.fill();
             
             // Draw stem
-            drawStem(x + 22, y, position);
+            const stemDirection = position <= 5 ? 'down' : 'up';
+            drawStem(x + 18, y, stemDirection);
             
             ctx.restore();
         }
         
         // Draw stem for note
-        function drawStem(x, y, position) {
-            const stemLength = 45; // Longer stem
-            const stemDirection = position > 5 ? 'down' : 'up'; // Correct stem direction
+        function drawStem(x, y, direction) {
+            const stemLength = 40;
             
             ctx.strokeStyle = '#4a5568';
             ctx.lineWidth = 3;
             ctx.beginPath();
             
-            if (stemDirection === 'down') {
+            if (direction === 'down') {
                 ctx.moveTo(x, y);
                 ctx.lineTo(x, y + stemLength);
             } else {
-                ctx.moveTo(x - 5, y);
-                ctx.lineTo(x - 5, y - stemLength);
+                ctx.moveTo(x - 8, y);
+                ctx.lineTo(x - 8, y - stemLength);
             }
             ctx.stroke();
         }
@@ -687,22 +702,29 @@
                 whiteKeysContainer.appendChild(key);
             });
             
-            // Create black keys - CORRECT POSITIONING
-            // Each black key is positioned between two white keys
+            // Create black keys - PERFECT POSITIONING
+            // Calculate exact positions between white keys
+            const whiteKeyCount = OCTAVE_NOTES.length;
+            const whiteKeyWidthPercent = 100 / whiteKeyCount;
+            
+            // Positions where black keys go (between specific white keys)
             const blackKeyPositions = [
-                { note: 'C#4', pos: 6.8 },  // Between C and D
-                { note: 'D#4', pos: 20.2 }, // Between D and E
-                { note: 'F#4', pos: 46.8 }, // Between F and G
-                { note: 'G#4', pos: 60.2 }, // Between G and A
-                { note: 'A#4', pos: 73.6 }  // Between A and B
+                { note: 'C#4', afterKey: 0 }, // After C (index 0)
+                { note: 'D#4', afterKey: 1 }, // After D (index 1)
+                { note: 'F#4', afterKey: 3 }, // After F (index 3)
+                { note: 'G#4', afterKey: 4 }, // After G (index 4)
+                { note: 'A#4', afterKey: 5 }  // After A (index 5)
             ];
             
-            blackKeyPositions.forEach(({ note, pos }) => {
+            blackKeyPositions.forEach(({ note, afterKey }) => {
                 const key = document.createElement('div');
                 key.className = 'black-key';
                 key.dataset.note = note;
-                key.textContent = note.replace('#', '♯');
-                key.style.left = `${pos}%`;
+                key.textContent = ''; // No text on black keys
+                
+                // Calculate PERFECT center position between white keys
+                const leftPos = (afterKey + 0.5) * whiteKeyWidthPercent;
+                key.style.left = `calc(${leftPos}% - ${whiteKeyWidthPercent * 0.35}%)`;
                 
                 key.addEventListener('click', () => checkAnswer(note, key));
                 
@@ -731,6 +753,8 @@
             const randomIndex = Math.floor(Math.random() * notes.length);
             currentNote = notes[randomIndex];
             
+            console.log('Generated note:', currentNote, 'Position:', notePositions[currentNote]);
+            
             document.getElementById('currentNote').textContent = '?';
             document.getElementById('feedback').innerHTML = '';
             document.getElementById('feedback').className = 'feedback';
@@ -742,13 +766,20 @@
         function checkAnswer(selectedNote, keyElement) {
             totalCount++;
             
-            // Normalize notes for comparison
+            // DEBUG: Show what's being compared
+            console.log('Selected:', selectedNote, 'Current:', currentNote);
+            
+            // Normalize notes for comparison (remove # and octave number)
             const normalizeNote = (note) => {
-                return note.replace('#', '').slice(0, -1);
+                // Remove sharp and last character (octave number)
+                const baseNote = note.replace('#', '');
+                return baseNote.slice(0, -1);
             };
             
             const selectedBase = normalizeNote(selectedNote);
             const currentBase = normalizeNote(currentNote);
+            
+            console.log('Selected base:', selectedBase, 'Current base:', currentBase);
             
             const isCorrect = selectedBase === currentBase;
             
@@ -829,14 +860,14 @@
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('./sw.js')
                     .then(reg => {
-                        console.log('Service Worker registered, version:', reg);
+                        console.log('Service Worker registered');
                         reg.update();
                     })
                     .catch(err => console.log('SW error:', err));
             }
             
             // Clear old cache
-            caches.delete('piano-notes-v1.3').catch(() => {});
+            caches.delete('piano-notes-v1.4').catch(() => {});
         });
     </script>
 </body>
