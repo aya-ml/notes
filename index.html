@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Ноты на GitHub</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            margin: 10px;
+            cursor: pointer;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        #result {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            min-height: 100px;
+        }
+        .note {
+            display: inline-block;
+            font-size: 24px;
+            margin: 10px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .github-link {
+            margin-top: 30px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎵 PWA для нот на GitHub Pages</h1>
+    <p>Простое приложение, работающее на любом устройстве</p>
+    
+    <button onclick="addNote()">Добавить ноту</button>
+    <button onclick="clearNotes()">Очистить</button>
+    
+    <div id="result">
+        Ноты появятся здесь
+    </div>
+    
+    <div class="github-link">
+        <strong>Ссылка для установки:</strong><br>
+        <span id="appUrl">Загрузка...</span><br>
+        <small>Откройте эту страницу на телефоне и установите как приложение</small>
+    </div>
+    
+    <script>
+        const notes = ['До', 'Ре', 'Ми', 'Фа', 'Соль', 'Ля', 'Си'];
+        
+        function addNote() {
+            const randomNote = notes[Math.floor(Math.random() * notes.length)];
+            const noteDiv = document.createElement('div');
+            noteDiv.className = 'note';
+            noteDiv.textContent = randomNote;
+            noteDiv.style.animation = 'fadeIn 0.5s';
+            document.getElementById('result').appendChild(noteDiv);
+        }
+        
+        function clearNotes() {
+            document.getElementById('result').innerHTML = 'Ноты появятся здесь';
+        }
+        
+        // Показываем URL для установки
+        document.getElementById('appUrl').textContent = window.location.href;
+        
+        // Регистрируем Service Worker для GitHub Pages
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('Service Worker зарегистрирован'))
+                .catch(err => console.log('Ошибка SW:', err));
+        }
+        
+        // Добавляем анимацию
+        const style = document.createElement('style');
+        style.textContent = '@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }';
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
