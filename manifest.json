@@ -2,7 +2,7 @@
   "name": "Ноты на пианино",
   "short_name": "Ноты",
   "description": "Обучающее приложение для сопоставления нот на нотном стане с клавишами пианино",
-  "start_url": "./",
+  "start_url": "./index.html?v=1.2",
   "display": "standalone",
   "background_color": "#667eea",
   "theme_color": "#764ba2",
