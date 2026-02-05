@@ -1,7 +1,7 @@
-const CACHE_NAME = 'piano-notes-v1.3';
+const CACHE_NAME = 'piano-notes-v1.4';
 const urlsToCache = [
   './',
-  './index.html?v=1.3',
+  './index.html?v=1.4',
   './manifest.json',
   './1.png',
   './2.png',
@@ -48,16 +48,7 @@ self.addEventListener('fetch', event => {
         if (response) {
           return response;
         }
-        return fetch(event.request).then(response => {
-          if (response.status === 200) {
-            const responseToCache = response.clone();
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-              });
-          }
-          return response;
-        });
+        return fetch(event.request);
       })
   );
 });
