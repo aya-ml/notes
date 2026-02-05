@@ -1,0 +1,21 @@
+{
+  "name": "Ноты PWA",
+  "short_name": "Ноты",
+  "description": "Простое приложение для работы с нотами",
+  "start_url": "https://ВАШ_НИК.github.io/notes-pwa/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4a90e2",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2991/2991148.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2991/2991148.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
