@@ -1,11 +1,11 @@
 {
-  "name": "Ноты PWA",
+  "name": "Ноты на пианино",
   "short_name": "Ноты",
-  "description": "Простое приложение для работы с нотами",
-  "start_url": "https://ВАШ_НИК.github.io/notes-pwa/",
+  "description": "Обучающее приложение для сопоставления нот на нотном стане с клавишами пианино",
+  "start_url": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#4a90e2",
+  "background_color": "#667eea",
+  "theme_color": "#764ba2",
   "icons": [
     {
       "src": "https://cdn-icons-png.flaticon.com/512/2991/2991148.png",
