@@ -8,26 +8,28 @@
 </head>
 <body>
 
-<div class="app">
+<div class="card">
     <header>
         <h1>Notes</h1>
         <div class="stats">
-            <span class="correct">✔ <span id="correct">0</span></span>
-            <span class="error">✖ <span id="errors">0</span></span>
+            ✔ <span id="ok">0</span>
+            ✖ <span id="fail">0</span>
         </div>
     </header>
 
+    <!-- НОТНЫЙ СТАН -->
     <div class="staff">
         <div class="lines">
             <span></span><span></span><span></span><span></span><span></span>
         </div>
 
-        <img id="clef" src="images/1.png" alt="clef">
-        <img id="note" src="images/3.png" alt="note">
+        <img class="clef" src="images/treble.png">
+        <img class="note" src="images/note.png" id="note">
     </div>
 
     <p class="task">Найди ноту на пианино</p>
 
+    <!-- ПИАНИНО -->
     <div class="piano">
         <div class="white" data-note="C">C</div>
         <div class="black" data-note="C#"></div>
