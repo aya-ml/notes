@@ -43,10 +43,10 @@ const noteEl = document.getElementById("note");
 
 function setNote(note) {
     const staffCenter = 80; // центр стана
-    const step = 14;        // расстояние между линией и промежутком
+    const step = 0;        // расстояние между линией и промежутком
 
     // линия E (1-я снизу) = шаг 2
-    const eLineStep = 2;
+    const eLineStep = 6;
 
     const offset = (staffSteps[note] - eLineStep) * step;
     noteEl.style.top = (staffCenter - offset) + "px";
