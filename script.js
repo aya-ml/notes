@@ -8,14 +8,31 @@ const notes = ["C", "D", "E", "F", "G", "A", "B"];
 и т.д.
 Мы жёстко привязываем к сетке, а не к пикселям
 */
-const staffMap = {
-    C: 6, // до
-    D: 5,
-    E: 4,
+/*
+Каждый шаг = линия или промежуток
+0 — нижняя добавочная (C)
+1 — промежуток
+2 — 1 линия (E)
+3 — промежуток
+4 — 2 линия (G)
+5 — промежуток
+6 — 3 линия (B)
+7 — промежуток
+8 — 4 линия (D)
+9 — промежуток
+10 — 5 линия (F)
+11 — промежуток
+12 — верхняя добавочная (A)
+*/
+
+const staffSteps = {
+    C: 0,
+    D: 1,
+    E: 2,
     F: 3,
-    G: 2,
-    A: 1,
-    B: 0
+    G: 4,
+    A: 5,
+    B: 6
 };
 
 let currentNote = null;
@@ -25,9 +42,14 @@ let fail = 0;
 const noteEl = document.getElementById("note");
 
 function setNote(note) {
-    const base = 50;     // центр стана
-    const step = 14;     // расстояние между линиями
-    noteEl.style.top = (base + staffMap[note] * step) + "px";
+    const staffCenter = 80; // центр стана
+    const step = 14;        // расстояние между линией и промежутком
+
+    // линия E (1-я снизу) = шаг 2
+    const eLineStep = 2;
+
+    const offset = (staffSteps[note] - eLineStep) * step;
+    noteEl.style.top = (staffCenter - offset) + "px";
 }
 
 function nextNote() {
