@@ -65,7 +65,7 @@ header {
 
 .note {
     position: absolute;
-    height: 26px;
+    height: 20px;
     left: 50%;
     transform: translateX(-50%);
     transition: top 0.2s ease;
