@@ -1,54 +1,23 @@
-const CACHE_NAME = 'piano-notes-v1.4';
-const urlsToCache = [
-  './',
-  './index.html?v=1.4',
-  './manifest.json',
-  './1.png',
-  './2.png',
-  './3.png'
-];
+let correct = 0;
+let errors = 0;
 
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Caching files for offline use');
-        return cache.addAll(urlsToCache);
-      })
-  );
-  self.skipWaiting();
-});
+// Пока для примера фиксированная нота
+const currentNote = "D";
 
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    }).then(() => {
-      return self.clients.claim();
-    })
-  );
-});
-
-self.addEventListener('fetch', event => {
-  if (event.request.url.includes('?v=')) {
-    event.respondWith(fetch(event.request));
-    return;
-  }
-  
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        if (response) {
-          return response;
+document.querySelectorAll(".keyboard button").forEach(btn => {
+    btn.addEventListener("click", () => {
+        if (btn.dataset.note === currentNote) {
+            correct++;
+            document.getElementById("correct").textContent = correct;
+            nextNote();
+        } else {
+            errors++;
+            document.getElementById("errors").textContent = errors;
         }
-        return fetch(event.request);
-      })
-  );
+    });
 });
+
+function nextNote() {
+    // Заглушка — позже добавим рандом нот и позиций
+    console.log("Следующая нота");
+}
