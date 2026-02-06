@@ -43,7 +43,7 @@ const noteEl = document.getElementById("note");
 
 function setNote(note) {
     const staffCenter = 70; // центр стана
-    const step = 0;        // расстояние между линией и промежутком
+    const step = 10;        // расстояние между линией и промежутком
 
     // линия E (1-я снизу) = шаг 2
     const eLineStep = 6;
