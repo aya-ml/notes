@@ -15,8 +15,8 @@ body {
 .app {
     background: white;
     width: 95%;
-    max-width: 700px;
-    border-radius: 16px;
+    max-width: 720px;
+    border-radius: 18px;
     padding: 16px;
 }
 
@@ -31,69 +31,91 @@ header {
     font-weight: bold;
 }
 
-.correct {
-    color: green;
-}
+.correct { color: green; }
+.error { color: red; }
 
-.error {
-    color: red;
-}
-
+/* 🎼 НОТНЫЙ СТАН */
 .staff {
-    margin: 20px 0;
     position: relative;
-    height: 120px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    height: 140px;
+    margin: 20px 0;
 }
 
-.staff img {
+.lines {
     position: absolute;
-    top: 20px;
+    width: 100%;
+    top: 40px;
+}
+
+.lines span {
+    display: block;
+    height: 1px;
+    background: #000;
+    margin: 12px 0;
 }
 
 #clef {
+    position: absolute;
     left: 10px;
-    height: 80px;
+    top: 20px;
+    height: 90px;
 }
 
 #note {
-    left: 120px;
-    height: 40px;
+    position: absolute;
+    left: 140px;
+    top: 72px;
+    height: 28px;
 }
 
-.task {
-    text-align: center;
-    margin: 16px 0;
+/* 🎹 ПИАНИНО */
+.piano {
+    position: relative;
+    display: flex;
+    height: 180px;
+    margin-top: 20px;
 }
 
-.keyboard {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
-}
-
-.keyboard button {
-    padding: 14px 0;
-    font-size: 18px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background: #f7f7f7;
+.white {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #aaa;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 10px;
+    font-weight: bold;
     cursor: pointer;
 }
 
-.keyboard button:active {
-    background: #ddd;
+.black {
+    position: absolute;
+    width: 4%;
+    height: 110px;
+    background: #000;
+    top: 0;
+    z-index: 2;
+    cursor: pointer;
 }
 
-/* 📱 телефон */
-@media (max-width: 480px) {
-    #note {
-        left: 90px;
-    }
+.black:nth-of-type(2)  { left: 12%; }
+.black:nth-of-type(4)  { left: 26%; }
+.black:nth-of-type(7)  { left: 54%; }
+.black:nth-of-type(9)  { left: 68%; }
+.black:nth-of-type(11) { left: 82%; }
 
-    .keyboard button {
-        font-size: 16px;
-        padding: 12px 0;
+/* состояния */
+.correct-key {
+    background: #4caf50 !important;
+}
+
+.wrong-key {
+    background: #f44336 !important;
+}
+
+/* 📱 */
+@media (max-width: 480px) {
+    .piano {
+        height: 150px;
     }
 }
