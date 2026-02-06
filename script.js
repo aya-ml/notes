@@ -1,45 +1,60 @@
 const notes = ["C", "D", "E", "F", "G", "A", "B"];
-const notePositions = {
-    C: 88,
-    D: 82,
-    E: 76,
-    F: 70,
-    G: 64,
-    A: 58,
-    B: 52
+
+/*
+Индексы:
+0 — нижняя добавочная
+1 — между
+2 — линия
+и т.д.
+Мы жёстко привязываем к сетке, а не к пикселям
+*/
+const staffMap = {
+    C: 6, // до
+    D: 5,
+    E: 4,
+    F: 3,
+    G: 2,
+    A: 1,
+    B: 0
 };
 
 let currentNote = null;
-let correct = 0;
-let errors = 0;
+let ok = 0;
+let fail = 0;
 
-const noteImg = document.getElementById("note");
+const noteEl = document.getElementById("note");
+
+function setNote(note) {
+    const base = 50;     // центр стана
+    const step = 14;     // расстояние между линиями
+    noteEl.style.top = (base + staffMap[note] * step) + "px";
+}
 
 function nextNote() {
     currentNote = notes[Math.floor(Math.random() * notes.length)];
-    noteImg.style.top = notePositions[currentNote] + "px";
+    setNote(currentNote);
 }
 
 document.querySelectorAll(".white, .black").forEach(key => {
     key.addEventListener("click", () => {
-        key.classList.remove("correct-key", "wrong-key");
+        key.classList.remove("correct", "wrong");
 
         if (key.dataset.note === currentNote) {
-            correct++;
-            key.classList.add("correct-key");
-            document.getElementById("correct").textContent = correct;
+            ok++;
+            document.getElementById("ok").textContent = ok;
+            key.classList.add("correct");
 
             setTimeout(() => {
-                key.classList.remove("correct-key");
+                key.classList.remove("correct");
                 nextNote();
             }, 400);
         } else {
-            errors++;
-            key.classList.add("wrong-key");
-            document.getElementById("errors").textContent = errors;
+            fail++;
+            document.getElementById("fail").textContent = fail;
+            key.classList.add("wrong");
 
             setTimeout(() => {
-                key.classList.remove("wrong-key");
+                key.classList.remove("wrong");
             }, 300);
         }
     });
