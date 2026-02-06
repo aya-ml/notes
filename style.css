@@ -1,1 +1,99 @@
+* {
+    box-sizing: border-box;
+    font-family: system-ui, sans-serif;
+}
 
+body {
+    margin: 0;
+    background: linear-gradient(135deg, #5f5fd6, #7a3db8);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.app {
+    background: white;
+    width: 95%;
+    max-width: 700px;
+    border-radius: 16px;
+    padding: 16px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stats span {
+    margin-left: 12px;
+    font-weight: bold;
+}
+
+.correct {
+    color: green;
+}
+
+.error {
+    color: red;
+}
+
+.staff {
+    margin: 20px 0;
+    position: relative;
+    height: 120px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.staff img {
+    position: absolute;
+    top: 20px;
+}
+
+#clef {
+    left: 10px;
+    height: 80px;
+}
+
+#note {
+    left: 120px;
+    height: 40px;
+}
+
+.task {
+    text-align: center;
+    margin: 16px 0;
+}
+
+.keyboard {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.keyboard button {
+    padding: 14px 0;
+    font-size: 18px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #f7f7f7;
+    cursor: pointer;
+}
+
+.keyboard button:active {
+    background: #ddd;
+}
+
+/* 📱 телефон */
+@media (max-width: 480px) {
+    #note {
+        left: 90px;
+    }
+
+    .keyboard button {
+        font-size: 16px;
+        padding: 12px 0;
+    }
+}
