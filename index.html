@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notes | Music Theory Trainer</title>
-    <link rel="stylesheet" href="styles.css?v=1.2">
+    <link rel="stylesheet" href="styles.css?v=1.3">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -45,16 +45,18 @@
             </div>
 
             <div class="music-staff-container">
-                <div class="staff">
-                    <div class="staff-line"></div>
-                    <div class="staff-line"></div>
-                    <div class="staff-line"></div>
-                    <div class="staff-line"></div>
-                    <div class="staff-line"></div>
-                    
-                    <img src="images/treble.png" alt="Treble Clef" class="clef">
-                    <div id="note-container" class="note-container">
-                        <!-- Note will be inserted here by JavaScript -->
+                <div class="staff-wrapper">
+                    <div class="staff">
+                        <div class="staff-line"></div>
+                        <div class="staff-line"></div>
+                        <div class="staff-line"></div>
+                        <div class="staff-line"></div>
+                        <div class="staff-line"></div>
+                        
+                        <img src="images/treble.png" alt="Treble Clef" class="clef">
+                        <div id="note-container" class="note-container">
+                            <!-- Note will be inserted here by JavaScript -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -68,12 +70,6 @@
                     <p><i class="fas fa-info-circle"></i> Only white keys are labeled for now</p>
                 </div>
             </div>
-            
-            <div class="controls">
-                <button id="new-note-btn" class="btn new-note-btn">
-                    <i class="fas fa-random"></i> New Note
-                </button>
-            </div>
         </main>
 
         <footer class="app-footer">
@@ -81,6 +77,6 @@
         </footer>
     </div>
 
-    <script src="script.js?v=1.2"></script>
+    <script src="script.js?v=1.3"></script>
 </body>
 </html>
