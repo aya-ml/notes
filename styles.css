@@ -167,11 +167,11 @@ body {
     font-size: 0.9rem;
 }
 
-/* Music staff - УВЕЛИЧЕННЫЕ PADDINGS СВЕРХУ И СНИЗУ */
+/* Music staff - 40px PADDING СВЕРХУ И СНИЗУ */
 .music-staff-container {
     background-color: #f9f9f9;
     border-radius: var(--border-radius);
-    padding: 25px 20px; /* +10px сверху и снизу */
+    padding: 30px 20px; /* Дополнительный внешний padding */
     margin-bottom: 20px;
     box-shadow: var(--shadow-light);
     flex-shrink: 0;
@@ -181,7 +181,7 @@ body {
     background-color: #fefefe;
     border-radius: var(--border-radius-sm);
     box-shadow: inset 0 0 0 1px #e0e0e0;
-    padding: 45px 0; /* +20px сверху и снизу (было 35px) */
+    padding: 80px 0; /* 40px сверху + 40px снизу = 80px total */
     overflow: hidden;
 }
 
@@ -373,11 +373,11 @@ body {
     }
     
     .music-staff-container {
-        padding: 20px 15px; /* Увеличил на мобильных */
+        padding: 25px 15px; /* Увеличил на мобильных */
     }
     
     .staff-wrapper {
-        padding: 35px 0; /* Увеличил на мобильных (было 25px) */
+        padding: 60px 0; /* 30px сверху + 30px снизу = 60px */
     }
     
     .staff {
@@ -462,11 +462,11 @@ body {
     }
     
     .music-staff-container {
-        padding: 18px 15px; /* Увеличил на маленьких экранах */
+        padding: 20px 15px; /* Увеличил на маленьких экранах */
     }
     
     .staff-wrapper {
-        padding: 30px 0; /* Увеличил на маленьких экранах (было 20px) */
+        padding: 50px 0; /* 25px сверху + 25px снизу = 50px */
     }
     
     .staff {
@@ -513,6 +513,17 @@ body {
     }
     
     .staff-wrapper {
-        padding: 30px 0;
+        padding: 50px 0; /* Уменьшаем на очень маленьких экранах */
+    }
+}
+
+/* Для очень-очень маленьких экранов */
+@media (max-height: 600px) {
+    .staff-wrapper {
+        padding: 40px 0; /* 20px сверху + 20px снизу */
+    }
+    
+    .music-staff-container {
+        padding: 15px 15px;
     }
 }
