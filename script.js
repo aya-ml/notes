@@ -13,25 +13,6 @@ const noteToKey = {
     'C5': 'C', 'D5': 'D', 'E5': 'E', 'F5': 'F', 'G5': 'G', 'A5': 'A', 'B5': 'B'
 };
 
-// Note positions on staff - ПЕРЕСЧИТАНО под новую высоту стана
-// Теперь расстояние между линиями = высоте ноты (28px на десктопе)
-const notePositions = {
-    'C4': 112,  // Под первой линией (снизу)
-    'D4': 84,   // На первой линии
-    'E4': 56,   // Между 1 и 2
-    'F4': 28,   // На второй линии
-    'G4': 0,    // Между 2 и 3
-    'A4': -28,  // На третьей линии
-    'B4': -56,  // Между 3 и 4
-    'C5': -84,  // На четвертой линии
-    'D5': -112, // Между 4 и 5
-    'E5': -140, // На пятой линии
-    'F5': -168, // Над пятой линией
-    'G5': -196, // Выше
-    'A5': -224, // Еще выше
-    'B5': -252  // Самая высокая
-};
-
 // Available notes for the game (only white keys for now)
 const availableNotes = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5'];
 
@@ -48,61 +29,15 @@ function initGame() {
     generateRandomNote();
     updateScoreboard();
     
-    // Адаптируем позиции нот под текущий размер экрана
-    updateNotePositionsForScreen();
-    
-    // При изменении размера окна пересчитываем позиции
-    window.addEventListener('resize', updateNotePositionsForScreen);
+    // При изменении размера окна перерисовываем ноту
+    window.addEventListener('resize', () => {
+        if (gameState.currentNote) {
+            repositionNote(gameState.currentNote);
+        }
+    });
 }
 
-// Обновляем позиции нот в зависимости от размера экрана
-function updateNotePositionsForScreen() {
-    // Получаем текущую высоту ноты из CSS переменной
-    const noteHeight = getComputedStyle(document.documentElement)
-        .getPropertyValue('--note-height').trim();
-    
-    // Преобразуем в число (убираем 'px')
-    const noteHeightValue = parseInt(noteHeight);
-    
-    // Если это мобильный размер, пересчитываем позиции
-    if (window.innerWidth <= 768) {
-        // Для мобильных позиции другие
-        const mobileNotePositions = {
-            'C4': noteHeightValue * 4,      // 88
-            'D4': noteHeightValue * 3,      // 66
-            'E4': noteHeightValue * 2,      // 44
-            'F4': noteHeightValue * 1,      // 22
-            'G4': 0,
-            'A4': -noteHeightValue * 1,     // -22
-            'B4': -noteHeightValue * 2,     // -44
-            'C5': -noteHeightValue * 3,     // -66
-            'D5': -noteHeightValue * 4,     // -88
-            'E5': -noteHeightValue * 5,     // -110
-            'F5': -noteHeightValue * 6,     // -132
-            'G5': -noteHeightValue * 7,     // -154
-            'A5': -noteHeightValue * 8,     // -176
-            'B5': -noteHeightValue * 9      // -198
-        };
-        
-        // Обновляем текущую ноту если она есть
-        if (gameState.currentNote) {
-            const noteImg = document.querySelector('.note');
-            if (noteImg) {
-                noteImg.style.top = `${mobileNotePositions[gameState.currentNote]}px`;
-            }
-        }
-    } else {
-        // Для десктопа используем оригинальные позиции
-        if (gameState.currentNote) {
-            const noteImg = document.querySelector('.note');
-            if (noteImg) {
-                noteImg.style.top = `${notePositions[gameState.currentNote]}px`;
-            }
-        }
-    }
-}
-
-// Create piano keys - ТОЛЬКО БЕЛЫЕ КЛАВИШИ
+// Create piano keys
 function createPiano() {
     // White keys: C, D, E, F, G, A, B
     const whiteKeys = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
@@ -179,31 +114,64 @@ function generateRandomNote() {
     noteImg.alt = 'Musical Note';
     noteImg.className = 'note';
     
-    // Позиционируем ноту в зависимости от размера экрана
-    updateNotePositionsForScreen();
-    
-    // Устанавливаем начальную позицию
-    const noteHeight = getComputedStyle(document.documentElement)
-        .getPropertyValue('--note-height').trim();
-    const noteHeightValue = parseInt(noteHeight);
-    
-    // Базовая позиция для десктопа
-    let position = notePositions[gameState.currentNote];
-    
-    // Если мобильный, используем мобильные позиции
-    if (window.innerWidth <= 768) {
-        position = noteHeightValue * (4 - availableNotes.indexOf(gameState.currentNote));
-    }
-    
-    noteImg.style.top = `${position}px`;
-    
     // Add to container
     noteContainer.appendChild(noteImg);
+    
+    // Позиционируем ноту
+    repositionNote(gameState.currentNote);
     
     // Если изображение не загружается, создаем placeholder
     noteImg.onerror = function() {
         this.src = createNotePlaceholder();
     };
+}
+
+// Reposition note based on staff lines
+function repositionNote(noteName) {
+    const noteImg = document.querySelector('.note');
+    if (!noteImg) return;
+    
+    // Получаем расстояние между линиями
+    const lineSpacing = getComputedStyle(document.documentElement)
+        .getPropertyValue('--staff-line-spacing').trim();
+    const spacingValue = parseInt(lineSpacing);
+    
+    // Правильное позиционирование нот на нотном стане:
+    // Линия 5 (самая верхняя) = -2 * spacing
+    // Линия 4 = -1 * spacing
+    // Линия 3 = 0
+    // Линия 2 = 1 * spacing
+    // Линия 1 (самая нижняя) = 2 * spacing
+    
+    // Позиции для каждой ноты (в пикселях от центра стана)
+    const notePositions = {
+        // Ноты под первой линией и на ней
+        'C4': 2.5 * spacingValue,  // Под первой линией
+        'D4': 2 * spacingValue,    // На первой линии
+        'E4': 1.5 * spacingValue,  // Между 1 и 2
+        'F4': 1 * spacingValue,    // На второй линии
+        'G4': 0.5 * spacingValue,  // Между 2 и 3
+        'A4': 0,                   // На третьей линии
+        'B4': -0.5 * spacingValue, // Между 3 и 4
+        'C5': -1 * spacingValue,   // На четвертой линии
+        'D5': -1.5 * spacingValue, // Между 4 и 5
+        'E5': -2 * spacingValue,   // На пятой линии
+        'F5': -2.5 * spacingValue, // Над пятой линией
+        'G5': -3 * spacingValue,   // Выше
+        'A5': -3.5 * spacingValue, // Еще выше
+        'B5': -4 * spacingValue    // Самая высокая
+    };
+    
+    // Получаем позицию для текущей ноты
+    const position = notePositions[noteName] || 0;
+    
+    // Центрируем ноту (высота ноты / 2) и добавляем позицию
+    const noteHeight = getComputedStyle(document.documentElement)
+        .getPropertyValue('--note-height').trim();
+    const noteHeightValue = parseInt(noteHeight);
+    
+    // Устанавливаем позицию (центрируем ноту относительно линии)
+    noteImg.style.top = `calc(50% + ${position}px - ${noteHeightValue/2}px)`;
 }
 
 // Update scoreboard
@@ -221,9 +189,9 @@ function updateScoreboard() {
 // Create a simple note SVG as placeholder
 function createNotePlaceholder() {
     return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">
-            <ellipse cx="14" cy="14" rx="10" ry="8" fill="#333"/>
-            <rect x="13" y="14" width="2" height="14" fill="#333"/>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+            <ellipse cx="15" cy="15" rx="11" ry="9" fill="#333"/>
+            <rect x="14" y="15" width="2" height="15" fill="#333"/>
         </svg>
     `);
 }
@@ -231,10 +199,10 @@ function createNotePlaceholder() {
 // Create a simple treble clef SVG as placeholder
 function createTreblePlaceholder() {
     return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 100">
-            <path d="M20,20 Q28,5 40,5 Q52,5 55,20 Q58,35 48,50 Q38,65 38,80 Q38,95 48,100 Q58,105 48,110" 
-                  stroke="#333" fill="none" stroke-width="2.5"/>
-            <path d="M20,85 L48,85" stroke="#333" stroke-width="2.5"/>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 150">
+            <path d="M30,30 Q45,15 60,15 Q75,15 82,30 Q89,45 72,60 Q55,75 55,105 Q55,135 72,150 Q89,165 72,180" 
+                  stroke="#333" fill="none" stroke-width="3.5"/>
+            <path d="M30,135 L72,135" stroke="#333" stroke-width="3.5"/>
         </svg>
     `);
 }
