@@ -17,12 +17,12 @@
     --text-light: #777777;
     --staff-color: #222222;
     --piano-white: #ffffff;
-    --piano-black: #222222;
     --shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
     --border-radius: 12px;
     --border-radius-sm: 8px;
     --note-height: 28px; /* Высота ноты для расчетов */
+    --piano-height: 140px; /* Нормальная высота пианино */
 }
 
 body {
@@ -166,12 +166,12 @@ body {
     font-size: 0.9rem;
 }
 
-/* Music staff - ИСПРАВЛЕНО: Линии внутри прямоугольника без закруглений */
+/* Music staff */
 .music-staff-container {
     background-color: #f9f9f9;
     border-radius: var(--border-radius);
     padding: 15px 20px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     box-shadow: var(--shadow-light);
     flex-shrink: 0;
 }
@@ -229,52 +229,53 @@ body {
     transform: scale(1.05);
 }
 
-/* Piano - ИСПРАВЛЕНО: ТОЛЬКО белые клавиши, черные убраны */
+/* Piano - ИСПРАВЛЕНО: нормальные пропорции, без промежутков */
 .piano-container {
     margin-bottom: 15px;
-    flex-grow: 1;
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    min-height: 180px;
+    align-items: center;
+    justify-content: center;
 }
 
 .piano {
     display: flex;
-    position: relative;
-    height: 100%; /* Занимает всю доступную высоту */
-    min-height: 180px;
-    background-color: #f5f5f5; /* Светлый фон вместо черного */
+    height: var(--piano-height); /* Нормальная высота */
+    width: 100%;
+    max-width: 700px; /* Ограничиваем ширину */
+    background-color: #f5f5f5;
     border-radius: var(--border-radius-sm);
-    padding: 0;
     box-shadow: var(--shadow);
     overflow: hidden;
-    flex-grow: 1;
     border: 1px solid #e0e0e0;
 }
 
 .piano-key {
-    position: relative;
-    flex-grow: 1;
+    flex: 1; /* Все клавиши одинаковой ширины */
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    padding-bottom: 20px;
+    padding-bottom: 15px;
     cursor: pointer;
     transition: all 0.1s ease;
     user-select: none;
-    border: none;
 }
 
 .white-key {
     background-color: var(--piano-white);
-    border-radius: 0 0 8px 8px;
-    margin: 0 1px;
-    z-index: 1;
-    border: 1px solid #e0e0e0;
+    border-radius: 0 0 6px 6px;
+    border-right: 1px solid #e0e0e0; /* Тонкие границы между клавишами */
+    border-left: none;
     border-top: none;
+    border-bottom: none;
 }
 
-/* УБРАЛ все черные клавиши полностью! */
+/* Убираем правую границу у последней клавиши */
+.white-key:last-child {
+    border-right: none;
+}
+
 .white-key:hover {
     background-color: #f0f0f0;
 }
@@ -289,21 +290,9 @@ body {
 
 .key-label {
     font-weight: 700;
-    font-size: 1.4rem; /* Увеличил размер букв на клавишах */
+    font-size: 1.3rem;
     color: var(--text-color);
     pointer-events: none;
-}
-
-.piano-help {
-    text-align: center;
-    font-size: 0.8rem;
-    color: var(--text-light);
-    margin-top: 8px;
-    flex-shrink: 0;
-}
-
-.piano-help i {
-    margin-right: 4px;
 }
 
 /* Footer */
@@ -320,7 +309,7 @@ body {
 /* Responsive design */
 @media (max-width: 768px) {
     .app-container {
-        height: 98vh; /* На мобильных занимаем почти весь экран */
+        height: 98vh;
         max-height: 98vh;
         border-radius: 8px;
     }
@@ -377,7 +366,8 @@ body {
     }
     
     :root {
-        --note-height: 22px; /* Меньше на мобильных */
+        --note-height: 22px;
+        --piano-height: 120px; /* Меньше на мобильных */
     }
     
     .staff {
@@ -403,20 +393,13 @@ body {
         height: var(--note-height);
     }
     
-    .piano-container {
-        min-height: 160px;
-    }
-    
     .piano {
-        min-height: 160px;
+        height: var(--piano-height);
+        max-width: 100%;
     }
     
     .key-label {
         font-size: 1.2rem;
-    }
-    
-    .piano-help {
-        font-size: 0.75rem;
     }
 }
 
@@ -463,11 +446,13 @@ body {
     }
     
     :root {
-        --note-height: 20px; /* Еще меньше на маленьких экранах */
+        --note-height: 20px;
+        --piano-height: 100px; /* Еще меньше на маленьких экранах */
     }
     
     .music-staff-container {
         padding: 12px 15px;
+        margin-bottom: 15px;
     }
     
     .staff-wrapper {
@@ -489,15 +474,16 @@ body {
         width: calc(100% - 55px);
     }
     
-    .piano-container {
-        min-height: 150px;
-    }
-    
     .piano {
-        min-height: 150px;
+        height: var(--piano-height);
     }
     
     .key-label {
         font-size: 1.1rem;
+    }
+    
+    .app-footer {
+        padding: 8px;
+        font-size: 0.7rem;
     }
 }
