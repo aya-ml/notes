@@ -22,6 +22,7 @@
     --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
     --border-radius: 12px;
     --border-radius-sm: 8px;
+    --note-height: 28px; /* Высота ноты для расчетов */
 }
 
 body {
@@ -40,7 +41,8 @@ body {
 .app-container {
     width: 100%;
     max-width: 1000px;
-    max-height: 95vh;
+    height: 95vh; /* Фиксированная высота для вписывания в экран */
+    max-height: 95vh; /* Максимальная высота */
     background-color: var(--card-color);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
@@ -53,23 +55,24 @@ body {
 .app-header {
     background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
     color: white;
-    padding: 16px 24px;
+    padding: 12px 20px;
     text-align: center;
+    flex-shrink: 0;
 }
 
 .logo-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    margin-bottom: 6px;
+    gap: 10px;
+    margin-bottom: 4px;
 }
 
 .logo-icon {
-    font-size: 26px;
+    font-size: 22px;
     background-color: rgba(255, 255, 255, 0.2);
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -78,20 +81,20 @@ body {
 
 .app-title {
     font-family: 'Poppins', sans-serif;
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
 }
 
 .app-subtitle {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     opacity: 0.9;
     font-weight: 300;
 }
 
 /* Main content */
 .main-content {
-    padding: 20px;
+    padding: 15px 20px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -103,16 +106,16 @@ body {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 20px;
-    padding-bottom: 16px;
+    gap: 12px;
+    margin-bottom: 15px;
+    padding-bottom: 12px;
     border-bottom: 1px solid #eee;
     flex-shrink: 0;
 }
 
 .score-container {
     display: flex;
-    gap: 15px;
+    gap: 12px;
     flex-wrap: wrap;
     justify-content: center;
 }
@@ -121,20 +124,20 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 10px 16px;
+    padding: 8px 12px;
     background-color: #f8f9fa;
     border-radius: var(--border-radius-sm);
-    min-width: 85px;
+    min-width: 70px;
 }
 
 .score-label {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--text-light);
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .score-value {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 700;
     color: var(--primary-color);
 }
@@ -142,7 +145,7 @@ body {
 .instructions {
     flex-grow: 1;
     max-width: 500px;
-    padding: 12px 16px;
+    padding: 10px 12px;
     background-color: #e8f4fd;
     border-radius: var(--border-radius-sm);
     border-left: 4px solid #2196f3;
@@ -153,66 +156,67 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
     color: #1565c0;
     font-weight: 500;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 .instructions i {
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
-/* Music staff */
+/* Music staff - ИСПРАВЛЕНО РАСПОЛОЖЕНИЕ ЛИНИЙ */
 .music-staff-container {
     background-color: #f9f9f9;
     border-radius: var(--border-radius);
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 15px 20px;
+    margin-bottom: 15px;
     box-shadow: var(--shadow-light);
     flex-shrink: 0;
 }
 
 .staff {
     position: relative;
-    height: 140px;
+    height: calc(var(--note-height) * 5); /* 5 линий с расстоянием = высоте ноты */
     background-color: #fefefe;
     border-radius: var(--border-radius-sm);
-    padding: 0 30px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     box-shadow: inset 0 0 0 1px #e0e0e0;
+    padding: 0;
 }
 
 .staff-line {
     width: 100%;
     height: 2px;
     background-color: var(--staff-color);
+    margin: 0;
 }
 
 .clef {
     position: absolute;
-    left: 15px;
+    left: 10px;
     top: 50%;
     transform: translateY(-50%);
-    height: 100px;
+    height: calc(var(--note-height) * 4); /* Размер скрипического ключа */
     width: auto;
     z-index: 1;
 }
 
 .note-container {
     position: absolute;
-    left: 90px;
-    width: calc(100% - 120px);
+    left: 70px;
+    width: calc(100% - 80px);
     height: 100%;
     z-index: 2;
 }
 
 .note {
     position: absolute;
-    width: 28px; /* Уменьшил размер ноты */
-    height: auto;
+    width: var(--note-height); /* Квадратная нота */
+    height: var(--note-height);
     transition: transform 0.3s ease;
 }
 
@@ -220,22 +224,26 @@ body {
     transform: scale(1.05);
 }
 
-/* Piano */
+/* Piano - ИСПРАВЛЕНО: убрал черный прямоугольник сверху */
 .piano-container {
-    margin-bottom: 20px;
-    flex-shrink: 0;
+    margin-bottom: 15px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 180px;
 }
 
 .piano {
     display: flex;
     position: relative;
-    height: 220px; /* Увеличил высоту пианино */
+    height: 100%; /* Занимает всю доступную высоту */
+    min-height: 180px;
     background-color: #2c2c2c;
     border-radius: 0 0 var(--border-radius-sm) var(--border-radius-sm);
-    padding: 0 2px;
-    margin-bottom: 12px;
+    padding: 0;
     box-shadow: var(--shadow);
     overflow: hidden;
+    flex-grow: 1;
 }
 
 .piano-key {
@@ -244,10 +252,11 @@ body {
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    padding-bottom: 20px; /* Увеличил отступ для более длинных клавиш */
+    padding-bottom: 20px;
     cursor: pointer;
     transition: all 0.1s ease;
     user-select: none;
+    border: none;
 }
 
 .white-key {
@@ -257,9 +266,9 @@ body {
     z-index: 1;
     border: 1px solid #e0e0e0;
     border-top: none;
-    min-height: 100%; /* Белые клавиши теперь занимают всю высоту */
 }
 
+/* УБРАЛ черный прямоугольник сверху - белые клавиши теперь нормальной высоты */
 .white-key:hover {
     background-color: #f0f0f0;
 }
@@ -274,7 +283,7 @@ body {
 
 .black-key {
     width: 60%;
-    height: 130px; /* Черные клавиши тоже немного увеличил */
+    height: 60%; /* Черные клавиши короче */
     background-color: var(--piano-black);
     border-radius: 0 0 6px 6px;
     position: absolute;
@@ -289,19 +298,21 @@ body {
 
 .key-label {
     font-weight: 700;
-    font-size: 1.3rem; /* Увеличил размер букв на клавишах */
+    font-size: 1.4rem; /* Увеличил размер букв на клавишах */
     color: var(--text-color);
     pointer-events: none;
 }
 
 .piano-help {
     text-align: center;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--text-light);
+    margin-top: 8px;
+    flex-shrink: 0;
 }
 
 .piano-help i {
-    margin-right: 6px;
+    margin-right: 4px;
 }
 
 /* Controls */
@@ -313,17 +324,17 @@ body {
 }
 
 .btn {
-    padding: 14px 28px;
+    padding: 12px 24px;
     border: none;
     border-radius: var(--border-radius-sm);
     font-family: 'Inter', sans-serif;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     transition: all 0.2s ease;
 }
 
@@ -331,7 +342,7 @@ body {
     background-color: var(--primary-color);
     color: white;
     width: 100%;
-    max-width: 300px;
+    max-width: 250px;
 }
 
 .new-note-btn:hover {
@@ -342,10 +353,10 @@ body {
 /* Footer */
 .app-footer {
     background-color: #f8f9fa;
-    padding: 12px;
+    padding: 10px;
     text-align: center;
     color: var(--text-light);
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     border-top: 1px solid #eee;
     flex-shrink: 0;
 }
@@ -353,135 +364,187 @@ body {
 /* Responsive design */
 @media (max-width: 768px) {
     .app-container {
+        height: 98vh; /* На мобильных занимаем почти весь экран */
         max-height: 98vh;
+        border-radius: 8px;
+    }
+    
+    .app-header {
+        padding: 10px 15px;
     }
     
     .app-title {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
     }
     
     .logo-icon {
-        width: 40px;
-        height: 40px;
-        font-size: 22px;
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
+    
+    .app-subtitle {
+        font-size: 0.75rem;
+    }
+    
+    .main-content {
+        padding: 12px 15px;
     }
     
     .game-info {
         flex-direction: column;
         align-items: stretch;
-        gap: 12px;
-        margin-bottom: 15px;
+        gap: 10px;
+        margin-bottom: 12px;
     }
     
     .score-container {
         justify-content: center;
-        gap: 10px;
+        gap: 8px;
     }
     
     .score-item {
-        min-width: 70px;
-        padding: 8px 12px;
+        min-width: 65px;
+        padding: 6px 10px;
     }
     
     .score-value {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
     }
     
     .instructions {
-        padding: 10px 12px;
+        padding: 8px 10px;
     }
     
     .instructions p {
-        font-size: 0.85rem;
-    }
-    
-    .staff {
-        height: 120px;
-        padding: 0 25px;
-    }
-    
-    .clef {
-        height: 85px;
-        left: 10px;
-    }
-    
-    .note-container {
-        left: 75px;
-        width: calc(100% - 100px);
-    }
-    
-    .note {
-        width: 24px; /* Еще меньше на мобильных */
-    }
-    
-    .piano {
-        height: 180px; /* Немного меньше на мобильных, но все равно длиннее чем было */
-    }
-    
-    .black-key {
-        height: 110px;
-    }
-    
-    .key-label {
-        font-size: 1.1rem;
-    }
-    
-    .piano-help {
         font-size: 0.8rem;
     }
     
-    .btn {
-        padding: 12px 24px;
-        font-size: 0.95rem;
+    :root {
+        --note-height: 22px; /* Меньше на мобильных */
     }
     
-    .main-content {
-        padding: 15px;
+    .staff {
+        height: calc(var(--note-height) * 5);
+    }
+    
+    .clef {
+        height: calc(var(--note-height) * 3.5);
+        left: 8px;
+    }
+    
+    .note-container {
+        left: 55px;
+        width: calc(100% - 65px);
+    }
+    
+    .note {
+        width: var(--note-height);
+        height: var(--note-height);
+    }
+    
+    .piano-container {
+        min-height: 160px;
+    }
+    
+    .piano {
+        min-height: 160px;
+    }
+    
+    .black-key {
+        height: 55%;
+    }
+    
+    .key-label {
+        font-size: 1.2rem;
+    }
+    
+    .piano-help {
+        font-size: 0.75rem;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
     }
 }
 
 @media (max-width: 480px) {
+    body {
+        padding: 5px;
+    }
+    
+    .app-container {
+        height: 99vh;
+        max-height: 99vh;
+        border-radius: 6px;
+    }
+    
     .app-header {
-        padding: 12px 16px;
+        padding: 8px 12px;
     }
     
     .app-title {
-        font-size: 1.6rem;
+        font-size: 1.3rem;
+    }
+    
+    .logo-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
     }
     
     .app-subtitle {
-        font-size: 0.85rem;
+        font-size: 0.7rem;
     }
     
     .main-content {
-        padding: 12px;
+        padding: 10px 12px;
+    }
+    
+    .score-item {
+        min-width: 60px;
+        padding: 5px 8px;
+    }
+    
+    .score-value {
+        font-size: 1.1rem;
+    }
+    
+    :root {
+        --note-height: 20px; /* Еще меньше на маленьких экранах */
     }
     
     .music-staff-container {
-        padding: 15px;
+        padding: 12px 15px;
     }
     
     .staff {
-        height: 100px;
+        height: calc(var(--note-height) * 5);
     }
     
     .clef {
-        height: 70px;
+        height: calc(var(--note-height) * 3);
     }
     
-    .note {
-        width: 20px;
+    .note-container {
+        left: 50px;
+        width: calc(100% - 60px);
+    }
+    
+    .piano-container {
+        min-height: 150px;
     }
     
     .piano {
-        height: 160px;
+        min-height: 150px;
     }
     
     .black-key {
-        height: 100px;
+        height: 50%;
     }
     
     .key-label {
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
 }
