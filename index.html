@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notes | Music Theory Trainer</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=1.2">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -57,10 +57,6 @@
                         <!-- Note will be inserted here by JavaScript -->
                     </div>
                 </div>
-                
-                <div class="current-note-info">
-                    <p>Current note: <span id="current-note-name" class="note-name">--</span></p>
-                </div>
             </div>
 
             <div class="piano-container">
@@ -74,9 +70,6 @@
             </div>
             
             <div class="controls">
-                <button id="hint-btn" class="btn hint-btn">
-                    <i class="fas fa-question-circle"></i> Show Hint
-                </button>
                 <button id="new-note-btn" class="btn new-note-btn">
                     <i class="fas fa-random"></i> New Note
                 </button>
@@ -88,21 +81,6 @@
         </footer>
     </div>
 
-    <div id="hint-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Note Reference</h2>
-                <button id="close-modal" class="close-btn">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="hint-image">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Treble_clef_notes.svg/800px-Treble_clef_notes.svg.png" alt="Treble clef notes reference">
-                </div>
-                <p class="hint-text">The note on the staff corresponds to <strong id="hint-note">--</strong>. Find this key on the piano.</p>
-            </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+    <script src="script.js?v=1.2"></script>
 </body>
 </html>
