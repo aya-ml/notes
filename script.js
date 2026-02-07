@@ -177,13 +177,13 @@ function handlePianoClick(key, keyElement) {
             keyElement.classList.remove('active');
             generateRandomNote();
             gameState.isProcessing = false;
-        }, 800);
+        }, 300);
     } else {
         keyElement.classList.add('wrong');
         setTimeout(() => {
             keyElement.classList.remove('wrong');
             gameState.isProcessing = false;
-        }, 800);
+        }, 300);
     }
     
     updateScoreboard();
