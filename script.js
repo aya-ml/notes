@@ -114,7 +114,6 @@ function createPiano() {
         const whiteKey = document.createElement('div');
         whiteKey.className = 'piano-key white-key';
         whiteKey.dataset.note = key;
-        whiteKey.dataset.type = 'white';
         
         const keyLabel = document.createElement('div');
         keyLabel.className = 'key-label';
@@ -129,15 +128,12 @@ function createPiano() {
         // Store reference
         gameState.pianoKeys.push({
             element: whiteKey,
-            note: key,
-            type: 'white'
+            note: key
         });
-        
-        // ЧЕРНЫЕ КЛАВИШИ УБРАНЫ ВОВСЕ!
     });
 }
 
-// Handle piano key click - ИСПРАВЛЕН ТАЙМАУТ (300ms вместо 800ms)
+// Handle piano key click
 function handlePianoClick(key, keyElement) {
     if (gameState.isProcessing) return;
     
@@ -156,13 +152,13 @@ function handlePianoClick(key, keyElement) {
             keyElement.classList.remove('active');
             generateRandomNote();
             gameState.isProcessing = false;
-        }, 300); // Изменено с 800ms на 300ms
+        }, 300);
     } else {
         keyElement.classList.add('wrong');
         setTimeout(() => {
             keyElement.classList.remove('wrong');
             gameState.isProcessing = false;
-        }, 300); // Изменено с 800ms на 300ms
+        }, 300);
     }
     
     updateScoreboard();
