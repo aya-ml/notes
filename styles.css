@@ -21,8 +21,9 @@
     --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
     --border-radius: 12px;
     --border-radius-sm: 8px;
-    --note-height: 28px; /* Высота ноты для расчетов */
-    --piano-height: 140px; /* Нормальная высота пианино */
+    --note-height: 30px; /* Высота ноты для расчетов */
+    --staff-line-spacing: 20px; /* Расстояние между линиями */
+    --piano-height: 160px; /* Увеличил высоту пианино в 2.5 раза (было 140px) */
 }
 
 body {
@@ -166,7 +167,7 @@ body {
     font-size: 0.9rem;
 }
 
-/* Music staff */
+/* Music staff - ИСПРАВЛЕНО РАССТОЯНИЕ МЕЖДУ ЛИНИЯМИ */
 .music-staff-container {
     background-color: #f9f9f9;
     border-radius: var(--border-radius);
@@ -180,17 +181,17 @@ body {
     background-color: #fefefe;
     border-radius: var(--border-radius-sm);
     box-shadow: inset 0 0 0 1px #e0e0e0;
-    padding: 20px 0; /* Отступы сверху и снизу чтобы линии не касались краев */
+    padding: 25px 0; /* Больше отступы сверху и снизу */
     overflow: hidden; /* Скрываем все что выходит за границы */
 }
 
 .staff {
     position: relative;
-    height: calc(var(--note-height) * 5); /* 5 линий с расстоянием = высоте ноты */
+    height: calc(var(--staff-line-spacing) * 4); /* 5 линий с правильным расстоянием */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 0 20px; /* Отступы слева и справа */
+    padding: 0 20px;
 }
 
 .staff-line {
@@ -200,27 +201,28 @@ body {
     margin: 0;
 }
 
+/* Увеличил скрипический ключ в 1.5 раза */
 .clef {
     position: absolute;
     left: 10px;
     top: 50%;
     transform: translateY(-50%);
-    height: calc(var(--note-height) * 4); /* Размер скрипического ключа */
+    height: calc(var(--staff-line-spacing) * 6); /* Увеличил в 1.5 раза */
     width: auto;
     z-index: 1;
 }
 
 .note-container {
     position: absolute;
-    left: 70px;
-    width: calc(100% - 80px);
+    left: 90px; /* Увеличил отступ из-за большего ключа */
+    width: calc(100% - 100px);
     height: 100%;
     z-index: 2;
 }
 
 .note {
     position: absolute;
-    width: var(--note-height); /* Квадратная нота */
+    width: var(--note-height);
     height: var(--note-height);
     transition: transform 0.3s ease;
 }
@@ -229,7 +231,7 @@ body {
     transform: scale(1.05);
 }
 
-/* Piano - ИСПРАВЛЕНО: нормальные пропорции, без промежутков */
+/* Piano - УВЕЛИЧЕНА ВЫСОТА КЛАВИШ В 2.5 РАЗА */
 .piano-container {
     margin-bottom: 15px;
     flex-shrink: 0;
@@ -241,9 +243,9 @@ body {
 
 .piano {
     display: flex;
-    height: var(--piano-height); /* Нормальная высота */
+    height: var(--piano-height); /* Увеличил в 2.5 раза */
     width: 100%;
-    max-width: 700px; /* Ограничиваем ширину */
+    max-width: 700px;
     background-color: #f5f5f5;
     border-radius: var(--border-radius-sm);
     box-shadow: var(--shadow);
@@ -252,11 +254,11 @@ body {
 }
 
 .piano-key {
-    flex: 1; /* Все клавиши одинаковой ширины */
+    flex: 1;
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    padding-bottom: 15px;
+    padding-bottom: 25px; /* Увеличил отступ для более длинных клавиш */
     cursor: pointer;
     transition: all 0.1s ease;
     user-select: none;
@@ -264,14 +266,13 @@ body {
 
 .white-key {
     background-color: var(--piano-white);
-    border-radius: 0 0 6px 6px;
-    border-right: 1px solid #e0e0e0; /* Тонкие границы между клавишами */
+    border-radius: 0 0 8px 8px;
+    border-right: 1px solid #e0e0e0;
     border-left: none;
     border-top: none;
     border-bottom: none;
 }
 
-/* Убираем правую границу у последней клавиши */
 .white-key:last-child {
     border-right: none;
 }
@@ -290,7 +291,7 @@ body {
 
 .key-label {
     font-weight: 700;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     color: var(--text-color);
     pointer-events: none;
 }
@@ -366,26 +367,27 @@ body {
     }
     
     :root {
-        --note-height: 22px;
-        --piano-height: 120px; /* Меньше на мобильных */
+        --note-height: 25px;
+        --staff-line-spacing: 16px;
+        --piano-height: 130px; /* Сохраняем пропорции */
     }
     
     .staff {
-        height: calc(var(--note-height) * 5);
+        height: calc(var(--staff-line-spacing) * 4);
     }
     
     .staff-wrapper {
-        padding: 15px 0;
+        padding: 20px 0;
     }
     
     .clef {
-        height: calc(var(--note-height) * 3.5);
+        height: calc(var(--staff-line-spacing) * 5);
         left: 8px;
     }
     
     .note-container {
-        left: 55px;
-        width: calc(100% - 65px);
+        left: 70px;
+        width: calc(100% - 80px);
     }
     
     .note {
@@ -446,8 +448,9 @@ body {
     }
     
     :root {
-        --note-height: 20px;
-        --piano-height: 100px; /* Еще меньше на маленьких экранах */
+        --note-height: 22px;
+        --staff-line-spacing: 14px;
+        --piano-height: 110px;
     }
     
     .music-staff-container {
@@ -456,22 +459,22 @@ body {
     }
     
     .staff-wrapper {
-        padding: 12px 0;
+        padding: 15px 0;
     }
     
     .staff {
-        height: calc(var(--note-height) * 5);
+        height: calc(var(--staff-line-spacing) * 4);
         padding: 0 15px;
     }
     
     .clef {
-        height: calc(var(--note-height) * 3);
+        height: calc(var(--staff-line-spacing) * 4.5);
         left: 5px;
     }
     
     .note-container {
-        left: 45px;
-        width: calc(100% - 55px);
+        left: 55px;
+        width: calc(100% - 65px);
     }
     
     .piano {
