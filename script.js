@@ -4,7 +4,6 @@ const gameState = {
     correctCount: 0,
     attemptsCount: 0,
     pianoKeys: [],
-    notePositions: [],
     isProcessing: false
 };
 
@@ -15,9 +14,23 @@ const noteToKey = {
 };
 
 // Note positions on staff (vertical positions in pixels)
+// ИСПРАВЛЕНО: теперь правильное расположение нот на нотном стане
+// Линия 5 (самая верхняя) -> Линия 1 (самая нижняя)
 const notePositions = {
-    'C4': 142, 'D4': 130, 'E4': 118, 'F4': 106, 'G4': 94, 'A4': 82, 'B4': 70,
-    'C5': 58, 'D5': 46, 'E5': 34, 'F5': 22, 'G5': 10, 'A5': -2, 'B5': -14
+    'C4': 125,  // Под первой линией
+    'D4': 115,  // На первой линии
+    'E4': 105,  // Между 1 и 2
+    'F4': 95,   // На второй линии
+    'G4': 85,   // Между 2 и 3
+    'A4': 75,   // На третьей линии
+    'B4': 65,   // Между 3 и 4
+    'C5': 55,   // На четвертой линии
+    'D5': 45,   // Между 4 и 5
+    'E5': 35,   // На пятой линии
+    'F5': 25,   // Над пятой линией
+    'G5': 15,   // Выше
+    'A5': 5,    // Еще выше
+    'B5': -5    // Самая высокая
 };
 
 // Available notes for the game (only white keys for now)
@@ -25,16 +38,11 @@ const availableNotes = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E
 
 // DOM elements
 const noteContainer = document.getElementById('note-container');
-const currentNoteName = document.getElementById('current-note-name');
 const pianoElement = document.querySelector('.piano');
 const correctCounter = document.getElementById('correct-counter');
 const attemptsCounter = document.getElementById('attempts-counter');
 const accuracyCounter = document.getElementById('accuracy-counter');
-const hintBtn = document.getElementById('hint-btn');
 const newNoteBtn = document.getElementById('new-note-btn');
-const hintModal = document.getElementById('hint-modal');
-const closeModal = document.getElementById('close-modal');
-const hintNote = document.getElementById('hint-note');
 
 // Initialize the game
 function initGame() {
@@ -43,18 +51,7 @@ function initGame() {
     updateScoreboard();
     
     // Event listeners
-    hintBtn.addEventListener('click', showHint);
     newNoteBtn.addEventListener('click', generateRandomNote);
-    closeModal.addEventListener('click', () => {
-        hintModal.style.display = 'none';
-    });
-    
-    // Close modal when clicking outside
-    window.addEventListener('click', (e) => {
-        if (e.target === hintModal) {
-            hintModal.style.display = 'none';
-        }
-    });
 }
 
 // Create piano keys
@@ -159,8 +156,10 @@ function generateRandomNote() {
     // Add to container
     noteContainer.appendChild(noteImg);
     
-    // Update current note display
-    currentNoteName.textContent = gameState.currentNote;
+    // Если изображение не загружается, создаем placeholder
+    noteImg.onerror = function() {
+        this.src = createNotePlaceholder();
+    };
 }
 
 // Update scoreboard
@@ -175,56 +174,39 @@ function updateScoreboard() {
     accuracyCounter.textContent = `${accuracy}%`;
 }
 
-// Show hint modal
-function showHint() {
-    hintNote.textContent = gameState.currentNote;
-    hintModal.style.display = 'flex';
-}
-
-// Initialize the game when DOM is loaded
-document.addEventListener('DOMContentLoaded', initGame);
-
-// Create placeholder images if they don't exist
-// In a real implementation, you would have actual images in the /images/ folder
-// For this demo, we'll create data URLs for the images
-function createPlaceholderImages() {
-    // Check if images exist, if not create placeholders
-    const trebleImg = document.querySelector('.clef');
-    const noteImg = document.querySelector('.note');
-    
-    // If treble.png doesn't load, use a placeholder
-    trebleImg.onerror = function() {
-        this.src = createTreblePlaceholder();
-    };
-    
-    // If note.png doesn't load, use a placeholder
-    if (noteImg) {
-        noteImg.onerror = function() {
-            this.src = createNotePlaceholder();
-        };
-    }
+// Create a simple note SVG as placeholder
+function createNotePlaceholder() {
+    return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 80">
+            <ellipse cx="20" cy="20" rx="15" ry="12" fill="#333"/>
+            <rect x="19" y="20" width="2" height="50" fill="#333"/>
+        </svg>
+    `);
 }
 
 // Create a simple treble clef SVG as placeholder
 function createTreblePlaceholder() {
     return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 200">
-            <path d="M30,40 Q40,10 60,10 Q80,10 85,40 Q90,70 70,90 Q50,110 50,140 Q50,170 70,180 Q90,190 70,200" 
-                  stroke="#333" fill="none" stroke-width="4"/>
-            <path d="M30,160 L70,160" stroke="#333" stroke-width="4"/>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 160">
+            <path d="M25,30 Q35,5 50,5 Q65,5 70,30 Q75,55 60,70 Q45,85 45,110 Q45,135 60,145 Q75,155 60,160" 
+                  stroke="#333" fill="none" stroke-width="3"/>
+            <path d="M25,125 L60,125" stroke="#333" stroke-width="3"/>
         </svg>
     `);
 }
 
-// Create a simple note SVG as placeholder
-function createNotePlaceholder() {
-    return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 100">
-            <ellipse cx="25" cy="25" rx="20" ry="15" fill="#333"/>
-            <rect x="23" y="25" width="4" height="60" fill="#333"/>
-        </svg>
-    `);
+// Create placeholder images if they don't exist
+function createPlaceholderImages() {
+    const trebleImg = document.querySelector('.clef');
+    
+    // Если treble.png не загружается, используем placeholder
+    trebleImg.onerror = function() {
+        this.src = createTreblePlaceholder();
+    };
 }
+
+// Initialize the game when DOM is loaded
+document.addEventListener('DOMContentLoaded', initGame);
 
 // Call the function to create placeholder images
 createPlaceholderImages();
