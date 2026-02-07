@@ -166,7 +166,7 @@ body {
     font-size: 0.9rem;
 }
 
-/* Music staff - ИСПРАВЛЕНО РАСПОЛОЖЕНИЕ ЛИНИЙ */
+/* Music staff - ИСПРАВЛЕНО: Линии внутри прямоугольника без закруглений */
 .music-staff-container {
     background-color: #f9f9f9;
     border-radius: var(--border-radius);
@@ -176,16 +176,21 @@ body {
     flex-shrink: 0;
 }
 
-.staff {
-    position: relative;
-    height: calc(var(--note-height) * 6); /* 🔧 +1 интервал */
+.staff-wrapper {
     background-color: #fefefe;
     border-radius: var(--border-radius-sm);
+    box-shadow: inset 0 0 0 1px #e0e0e0;
+    padding: 20px 0; /* Отступы сверху и снизу чтобы линии не касались краев */
+    overflow: hidden; /* Скрываем все что выходит за границы */
+}
+
+.staff {
+    position: relative;
+    height: calc(var(--note-height) * 5); /* 5 линий с расстоянием = высоте ноты */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    box-shadow: inset 0 0 0 1px #e0e0e0;
-    padding: calc(var(--note-height) / 2) 0; /* ✅ отступ сверху и снизу */
+    padding: 0 20px; /* Отступы слева и справа */
 }
 
 .staff-line {
@@ -224,7 +229,7 @@ body {
     transform: scale(1.05);
 }
 
-/* Piano - ИСПРАВЛЕНО: убрал черный прямоугольник сверху */
+/* Piano - ИСПРАВЛЕНО: ТОЛЬКО белые клавиши, черные убраны */
 .piano-container {
     margin-bottom: 15px;
     flex-grow: 1;
@@ -236,14 +241,15 @@ body {
 .piano {
     display: flex;
     position: relative;
-    height: 100%;
+    height: 100%; /* Занимает всю доступную высоту */
     min-height: 180px;
-    background-color: transparent; /* ❌ убираем черный фон */
-    border-radius: 0 0 var(--border-radius-sm) var(--border-radius-sm);
-    padding-top: 10px; /* ✅ максимум 10px сверху */
+    background-color: #f5f5f5; /* Светлый фон вместо черного */
+    border-radius: var(--border-radius-sm);
+    padding: 0;
     box-shadow: var(--shadow);
     overflow: hidden;
     flex-grow: 1;
+    border: 1px solid #e0e0e0;
 }
 
 .piano-key {
@@ -266,10 +272,9 @@ body {
     z-index: 1;
     border: 1px solid #e0e0e0;
     border-top: none;
-    height: 100%; /* ✅ клавиши занимают всю высоту */
 }
 
-/* УБРАЛ черный прямоугольник сверху - белые клавиши теперь нормальной высоты */
+/* УБРАЛ все черные клавиши полностью! */
 .white-key:hover {
     background-color: #f0f0f0;
 }
@@ -280,21 +285,6 @@ body {
 
 .white-key.wrong {
     background-color: var(--error-color) !important;
-}
-
-.black-key {
-    width: 60%;
-    height: 60%; /* Черные клавиши короче */
-    background-color: var(--piano-black);
-    border-radius: 0 0 6px 6px;
-    position: absolute;
-    top: 0;
-    z-index: 2;
-    margin-left: -30%;
-}
-
-.black-key:hover {
-    background-color: #444;
 }
 
 .key-label {
@@ -314,41 +304,6 @@ body {
 
 .piano-help i {
     margin-right: 4px;
-}
-
-/* Controls */
-.controls {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-    flex-shrink: 0;
-}
-
-.btn {
-    padding: 12px 24px;
-    border: none;
-    border-radius: var(--border-radius-sm);
-    font-family: 'Inter', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: all 0.2s ease;
-}
-
-.new-note-btn {
-    background-color: var(--primary-color);
-    color: white;
-    width: 100%;
-    max-width: 250px;
-}
-
-.new-note-btn:hover {
-    background-color: var(--primary-light);
-    transform: translateY(-2px);
 }
 
 /* Footer */
@@ -429,6 +384,10 @@ body {
         height: calc(var(--note-height) * 5);
     }
     
+    .staff-wrapper {
+        padding: 15px 0;
+    }
+    
     .clef {
         height: calc(var(--note-height) * 3.5);
         left: 8px;
@@ -452,21 +411,12 @@ body {
         min-height: 160px;
     }
     
-    .black-key {
-        height: 55%;
-    }
-    
     .key-label {
         font-size: 1.2rem;
     }
     
     .piano-help {
         font-size: 0.75rem;
-    }
-    
-    .btn {
-        padding: 10px 20px;
-        font-size: 0.9rem;
     }
 }
 
@@ -520,17 +470,23 @@ body {
         padding: 12px 15px;
     }
     
+    .staff-wrapper {
+        padding: 12px 0;
+    }
+    
     .staff {
         height: calc(var(--note-height) * 5);
+        padding: 0 15px;
     }
     
     .clef {
         height: calc(var(--note-height) * 3);
+        left: 5px;
     }
     
     .note-container {
-        left: 50px;
-        width: calc(100% - 60px);
+        left: 45px;
+        width: calc(100% - 55px);
     }
     
     .piano-container {
@@ -539,10 +495,6 @@ body {
     
     .piano {
         min-height: 150px;
-    }
-    
-    .black-key {
-        height: 50%;
     }
     
     .key-label {
