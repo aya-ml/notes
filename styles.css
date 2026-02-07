@@ -23,7 +23,7 @@
     --border-radius-sm: 8px;
     --note-height: 30px;
     --staff-line-spacing: 20px;
-    --piano-height: 350px; /* УВЕЛИЧЕНО В 2.5 РАЗА: было 140px, стало 350px */
+    --piano-height: 350px;
 }
 
 body {
@@ -167,11 +167,11 @@ body {
     font-size: 0.9rem;
 }
 
-/* Music staff - ДОБАВИЛ БОЛЬШЕ PADDINGS */
+/* Music staff - УВЕЛИЧЕННЫЕ PADDINGS СВЕРХУ И СНИЗУ */
 .music-staff-container {
     background-color: #f9f9f9;
     border-radius: var(--border-radius);
-    padding: 20px; /* Увеличил padding */
+    padding: 25px 20px; /* +10px сверху и снизу */
     margin-bottom: 20px;
     box-shadow: var(--shadow-light);
     flex-shrink: 0;
@@ -181,7 +181,7 @@ body {
     background-color: #fefefe;
     border-radius: var(--border-radius-sm);
     box-shadow: inset 0 0 0 1px #e0e0e0;
-    padding: 35px 0; /* УВЕЛИЧИЛ PADDING чтобы ноты не вылетали */
+    padding: 45px 0; /* +20px сверху и снизу (было 35px) */
     overflow: hidden;
 }
 
@@ -201,7 +201,6 @@ body {
     margin: 0;
 }
 
-/* Увеличил скрипический ключ */
 .clef {
     position: absolute;
     left: 15px;
@@ -225,14 +224,14 @@ body {
     width: var(--note-height);
     height: var(--note-height);
     transition: transform 0.3s ease;
-    transform: translateY(-50%); /* Центрируем ноту по вертикали */
+    transform: translateY(-50%);
 }
 
 .note:hover {
     transform: translateY(-50%) scale(1.05);
 }
 
-/* Piano - ВЫСОТА 350px (2.5 раза больше чем было) */
+/* Piano */
 .piano-container {
     margin-bottom: 15px;
     flex-shrink: 0;
@@ -244,7 +243,7 @@ body {
 
 .piano {
     display: flex;
-    height: var(--piano-height); /* 350px на десктопе */
+    height: var(--piano-height);
     width: 100%;
     max-width: 700px;
     background-color: #f5f5f5;
@@ -259,7 +258,7 @@ body {
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    padding-bottom: 60px; /* Увеличил для длинных клавиш */
+    padding-bottom: 60px;
     cursor: pointer;
     transition: all 0.1s ease;
     user-select: none;
@@ -267,7 +266,7 @@ body {
 
 .white-key {
     background-color: var(--piano-white);
-    border-radius: 0 0 10px 10px; /* Увеличил закругление */
+    border-radius: 0 0 10px 10px;
     border-right: 1px solid #e0e0e0;
     border-left: none;
     border-top: none;
@@ -292,7 +291,7 @@ body {
 
 .key-label {
     font-weight: 700;
-    font-size: 1.6rem; /* Увеличил размер букв */
+    font-size: 1.6rem;
     color: var(--text-color);
     pointer-events: none;
 }
@@ -370,15 +369,19 @@ body {
     :root {
         --note-height: 25px;
         --staff-line-spacing: 16px;
-        --piano-height: 280px; /* Сохраняем пропорции */
+        --piano-height: 280px;
+    }
+    
+    .music-staff-container {
+        padding: 20px 15px; /* Увеличил на мобильных */
+    }
+    
+    .staff-wrapper {
+        padding: 35px 0; /* Увеличил на мобильных (было 25px) */
     }
     
     .staff {
         height: calc(var(--staff-line-spacing) * 4);
-    }
-    
-    .staff-wrapper {
-        padding: 25px 0; /* Меньше на мобильных, но все равно достаточно */
     }
     
     .clef {
@@ -402,7 +405,7 @@ body {
     }
     
     .piano-key {
-        padding-bottom: 45px; /* Меньше на мобильных */
+        padding-bottom: 45px;
     }
     
     .key-label {
@@ -455,16 +458,15 @@ body {
     :root {
         --note-height: 22px;
         --staff-line-spacing: 14px;
-        --piano-height: 220px; /* Сохраняем пропорции */
+        --piano-height: 220px;
     }
     
     .music-staff-container {
-        padding: 15px;
-        margin-bottom: 15px;
+        padding: 18px 15px; /* Увеличил на маленьких экранах */
     }
     
     .staff-wrapper {
-        padding: 20px 0;
+        padding: 30px 0; /* Увеличил на маленьких экранах (было 20px) */
     }
     
     .staff {
@@ -503,7 +505,7 @@ body {
 /* Для очень маленьких экранов */
 @media (max-height: 700px) {
     :root {
-        --piano-height: 250px; /* Меньше на маленьких экранах по высоте */
+        --piano-height: 250px;
     }
     
     .piano-key {
@@ -511,6 +513,6 @@ body {
     }
     
     .staff-wrapper {
-        padding: 25px 0;
+        padding: 30px 0;
     }
 }
