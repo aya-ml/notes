@@ -41,16 +41,12 @@ const pianoElement = document.querySelector('.piano');
 const correctCounter = document.getElementById('correct-counter');
 const attemptsCounter = document.getElementById('attempts-counter');
 const accuracyCounter = document.getElementById('accuracy-counter');
-const newNoteBtn = document.getElementById('new-note-btn');
 
 // Initialize the game
 function initGame() {
     createPiano();
     generateRandomNote();
     updateScoreboard();
-    
-    // Event listeners
-    newNoteBtn.addEventListener('click', generateRandomNote);
     
     // Адаптируем позиции нот под текущий размер экрана
     updateNotePositionsForScreen();
@@ -106,7 +102,7 @@ function updateNotePositionsForScreen() {
     }
 }
 
-// Create piano keys
+// Create piano keys - ТОЛЬКО БЕЛЫЕ КЛАВИШИ
 function createPiano() {
     // White keys: C, D, E, F, G, A, B
     const whiteKeys = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
@@ -137,28 +133,11 @@ function createPiano() {
             type: 'white'
         });
         
-        // Add black keys between certain white keys
-        if (index !== 2 && index !== 6) { // No black key between E-F and B-C
-            const blackKey = document.createElement('div');
-            blackKey.className = 'piano-key black-key';
-            blackKey.dataset.type = 'black';
-            
-            // Position the black key
-            blackKey.style.left = `calc(${(index + 1) * (100 / 7)}% - 15px)`;
-            
-            pianoElement.appendChild(blackKey);
-            
-            // Store reference
-            gameState.pianoKeys.push({
-                element: blackKey,
-                note: null, // Black keys not used in this version
-                type: 'black'
-            });
-        }
+        // ЧЕРНЫЕ КЛАВИШИ УБРАНЫ ВОВСЕ!
     });
 }
 
-// Handle piano key click
+// Handle piano key click - ИСПРАВЛЕН ТАЙМАУТ (300ms вместо 800ms)
 function handlePianoClick(key, keyElement) {
     if (gameState.isProcessing) return;
     
@@ -177,13 +156,13 @@ function handlePianoClick(key, keyElement) {
             keyElement.classList.remove('active');
             generateRandomNote();
             gameState.isProcessing = false;
-        }, 300);
+        }, 300); // Изменено с 800ms на 300ms
     } else {
         keyElement.classList.add('wrong');
         setTimeout(() => {
             keyElement.classList.remove('wrong');
             gameState.isProcessing = false;
-        }, 300);
+        }, 300); // Изменено с 800ms на 300ms
     }
     
     updateScoreboard();
