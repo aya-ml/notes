@@ -126,7 +126,7 @@ function generateRandomNote() {
     };
 }
 
-// Reposition note based on staff lines
+// Reposition note based on staff lines - ИСПРАВЛЕНО: ЦЕНТРИРУЕМ НОТУ
 function repositionNote(noteName) {
     const noteImg = document.querySelector('.note');
     if (!noteImg) return;
@@ -136,28 +136,24 @@ function repositionNote(noteName) {
         .getPropertyValue('--staff-line-spacing').trim();
     const spacingValue = parseInt(lineSpacing);
     
-    // Правильное позиционирование нот на нотном стане:
-    // Линия 5 (самая верхняя) = -2 * spacing
-    // Линия 4 = -1 * spacing
-    // Линия 3 = 0
-    // Линия 2 = 1 * spacing
-    // Линия 1 (самая нижняя) = 2 * spacing
+    // Правильное позиционирование нот на нотном стане (центрируем по линии):
+    // Ноты будут располагаться на линиях и между ними
+    // Каждая линия и промежуток = spacingValue
     
-    // Позиции для каждой ноты (в пикселях от центра стана)
     const notePositions = {
-        // Ноты под первой линией и на ней
-        'C4': 2.5 * spacingValue,  // Под первой линией
+        // C4 - под первой линией
+        'C4': 2.5 * spacingValue,  // Центр между подлинейкой и линией 1
         'D4': 2 * spacingValue,    // На первой линии
-        'E4': 1.5 * spacingValue,  // Между 1 и 2
+        'E4': 1.5 * spacingValue,  // Между линиями 1 и 2
         'F4': 1 * spacingValue,    // На второй линии
-        'G4': 0.5 * spacingValue,  // Между 2 и 3
-        'A4': 0,                   // На третьей линии
-        'B4': -0.5 * spacingValue, // Между 3 и 4
+        'G4': 0.5 * spacingValue,  // Между линиями 2 и 3
+        'A4': 0,                   // На третьей линии (центр стана)
+        'B4': -0.5 * spacingValue, // Между линиями 3 и 4
         'C5': -1 * spacingValue,   // На четвертой линии
-        'D5': -1.5 * spacingValue, // Между 4 и 5
+        'D5': -1.5 * spacingValue, // Между линиями 4 и 5
         'E5': -2 * spacingValue,   // На пятой линии
         'F5': -2.5 * spacingValue, // Над пятой линией
-        'G5': -3 * spacingValue,   // Выше
+        'G5': -3 * spacingValue,   // Еще выше
         'A5': -3.5 * spacingValue, // Еще выше
         'B5': -4 * spacingValue    // Самая высокая
     };
@@ -165,13 +161,8 @@ function repositionNote(noteName) {
     // Получаем позицию для текущей ноты
     const position = notePositions[noteName] || 0;
     
-    // Центрируем ноту (высота ноты / 2) и добавляем позицию
-    const noteHeight = getComputedStyle(document.documentElement)
-        .getPropertyValue('--note-height').trim();
-    const noteHeightValue = parseInt(noteHeight);
-    
-    // Устанавливаем позицию (центрируем ноту относительно линии)
-    noteImg.style.top = `calc(50% + ${position}px - ${noteHeightValue/2}px)`;
+    // НЕ нужно вычитать половину высоты ноты, т.к. CSS уже центрирует через transform: translateY(-50%)
+    noteImg.style.top = `calc(50% + ${position}px)`;
 }
 
 // Update scoreboard
