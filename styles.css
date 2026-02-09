@@ -21,9 +21,9 @@
     --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
     --border-radius: 12px;
     --border-radius-sm: 8px;
-    --note-height: 30px;
+    --note-height: 25px;
     --staff-line-spacing: 20px;
-    --piano-height: 350px;
+    --piano-height: 250px;
 }
 
 body {
@@ -385,7 +385,7 @@ body {
     }
     
     .clef {
-        height: calc(var(--staff-line-spacing) * 5);
+        height: calc(var(--staff-line-spacing) * 6);
         left: 10px;
     }
     
@@ -475,7 +475,7 @@ body {
     }
     
     .clef {
-        height: calc(var(--staff-line-spacing) * 4.5);
+        height: calc(var(--staff-line-spacing) * 6);
         left: 8px;
     }
     
