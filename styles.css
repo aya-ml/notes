@@ -217,10 +217,11 @@ body {
     width: calc(100% - 100px);
     height: 100%;
     z-index: 2;
+    display: flex;
+    justify-content: center;
 }
 
 .note {
-    position: absolute;
     width: calc(var(--note-height) * 2.5);
     height: var(--note-height);
     transition: transform 0.3s ease;
