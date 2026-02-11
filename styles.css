@@ -395,7 +395,7 @@ body {
     }
     
     .note {
-        width: var(--note-height);
+        width: calc(var(--note-height) * 2.5);
         height: var(--note-height);
     }
     
