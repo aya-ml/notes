@@ -221,7 +221,7 @@ body {
 
 .note {
     position: absolute;
-    width: var(--note-height);
+    width: calc(var(--note-height) * 2.5);
     height: var(--note-height);
     transition: transform 0.3s ease;
     transform: translateY(-50%);
