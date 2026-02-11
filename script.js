@@ -28,12 +28,26 @@ function initGame() {
     createPiano();
     generateRandomNote();
     updateScoreboard();
+    positionStaffLines();
     
     // При изменении размера окна перерисовываем ноту
     window.addEventListener('resize', () => {
         if (gameState.currentNote) {
             repositionNote(gameState.currentNote);
         }
+    });
+}
+
+function positionStaffLines() {
+    const lines = document.querySelectorAll('.staff-line');
+
+    const spacing = parseInt(
+        getComputedStyle(document.documentElement)
+        .getPropertyValue('--staff-line-spacing')
+    );
+
+    lines.forEach((line, index) => {
+        line.style.top = `${index * spacing}px`;
     });
 }
 
@@ -110,7 +124,7 @@ function generateRandomNote() {
     
     // Create note image
     const noteImg = document.createElement('img');
-    noteImg.src = 'images/note.png';
+    noteImg.src = 'images/nt.png';
     noteImg.alt = 'Musical Note';
     noteImg.className = 'note';
     
@@ -126,43 +140,77 @@ function generateRandomNote() {
     };
 }
 
-// Reposition note based on staff lines - ИСПРАВЛЕНО: ЦЕНТРИРУЕМ НОТУ
+// Reposition note based on staff lines - С ДОПОЛНИТЕЛЬНЫМИ ЛИНИЯМИ
 function repositionNote(noteName) {
     const noteImg = document.querySelector('.note');
     if (!noteImg) return;
-    
-    // Получаем расстояние между линиями
-    const lineSpacing = getComputedStyle(document.documentElement)
-        .getPropertyValue('--staff-line-spacing').trim();
-    const spacingValue = parseInt(lineSpacing);
-    
-    // Правильное позиционирование нот на нотном стане (центрируем по линии):
-    // Ноты будут располагаться на линиях и между ними
-    // Каждая линия и промежуток = spacingValue
-    
-    const notePositions = {
-        // C4 - под первой линией
-        'C4': 2.5 * spacingValue,  // Центр между подлинейкой и линией 1
-        'D4': 2 * spacingValue,    // На первой линии
-        'E4': 1.5 * spacingValue,  // Между линиями 1 и 2
-        'F4': 1 * spacingValue,    // На второй линии
-        'G4': 0.5 * spacingValue,  // Между линиями 2 и 3
-        'A4': 0,                   // На третьей линии (центр стана)
-        'B4': -0.5 * spacingValue, // Между линиями 3 и 4
-        'C5': -1 * spacingValue,   // На четвертой линии
-        'D5': -1.5 * spacingValue, // Между линиями 4 и 5
-        'E5': -2 * spacingValue,   // На пятой линии
-        'F5': -2.5 * spacingValue, // Над пятой линией
-        'G5': -3 * spacingValue,   // Еще выше
-        'A5': -3.5 * spacingValue, // Еще выше
-        'B5': -4 * spacingValue    // Самая высокая
+
+    const spacing = parseInt(
+        getComputedStyle(document.documentElement)
+        .getPropertyValue('--staff-line-spacing')
+    );
+
+    const step = spacing / 2;
+
+    const noteSteps = {
+        'C4': 6,
+        'D4': 5,
+        'E4': 4,
+        'F4': 3,
+        'G4': 2,
+        'A4': 1,
+        'B4': 0,
+        'C5': -1,
+        'D5': -2,
+        'E5': -3,
+        'F5': -4,
+        'G5': -5,
+        'A5': -6,
+        'B5': -7
     };
-    
-    // Получаем позицию для текущей ноты
-    const position = notePositions[noteName] || 0;
-    
-    // НЕ нужно вычитать половину высоты ноты, т.к. CSS уже центрирует через transform: translateY(-50%)
-    noteImg.style.top = `calc(50% + ${position}px)`;
+
+    const middleLineCenter =
+        (2 * spacing) + (3 / 2);
+
+    const offset = noteSteps[noteName] * step;
+
+    noteImg.style.top = `${middleLineCenter + offset}px`;
+
+    addLedgerLines(noteName);
+}
+
+// Функция для добавления дополнительных линий
+function addLedgerLines(noteName) {
+    const noteContainer = document.querySelector('.note-container');
+    if (!noteContainer) return;
+
+    // удалить старые линии
+    document.querySelectorAll('.ledger-line').forEach(line => line.remove());
+
+    const spacing = parseInt(
+        getComputedStyle(document.documentElement)
+        .getPropertyValue('--staff-line-spacing')
+    );
+
+    const step = spacing / 2;
+    const middleLineCenter = 2 * spacing;
+
+    const noteSteps = {
+        'C4': 6,
+        'A5': -6,
+        'B5': -6
+    };
+
+    if (!(noteName in noteSteps)) return;
+
+    const offset = noteSteps[noteName] * step;
+    const ledgerY = middleLineCenter + offset;
+
+    const line = document.createElement('div');
+    line.className = 'ledger-line';
+    line.style.top = `${ledgerY}px`;
+
+    noteContainer.appendChild(line);
 }
 
 // Update scoreboard

@@ -15,13 +15,13 @@
     --card-color: #ffffff;
     --text-color: #333333;
     --text-light: #777777;
-    --staff-color: #222222;
+    --staff-color: #191A1A;
     --piano-white: #ffffff;
     --shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
     --border-radius: 12px;
     --border-radius-sm: 8px;
-    --note-height: 25px;
+    --note-height: 20px;
     --staff-line-spacing: 20px;
     --piano-height: 250px;
 }
@@ -188,46 +188,46 @@ body {
 .staff {
     position: relative;
     height: calc(var(--staff-line-spacing) * 4);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     padding: 0 20px;
 }
 
 .staff-line {
-    width: 100%;
-    height: 2px;
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    height: 3px;
     background-color: var(--staff-color);
-    margin: 0;
 }
 
 .clef {
     position: absolute;
     left: 15px;
-    top: 50%;
+    top: 65%;
     transform: translateY(-50%);
-    height: calc(var(--staff-line-spacing) * 6);
+    height: calc(var(--staff-line-spacing) * 8);
     width: auto;
     z-index: 1;
 }
 
 .note-container {
     position: absolute;
-    left: 90px;
     width: calc(100% - 100px);
     height: 100%;
     z-index: 2;
+    display: flex;
+    justify-content: center;
 }
 
 .note {
+    position: absolute;
     width: var(--note-height);
     height: var(--note-height);
     transition: transform 0.3s ease;
-    transform: translateY(-50%) rotate(90deg);;
+    transform: translateY(-50%);
 }
 
 .note:hover {
-    transform: translateY(-50%) scale(1.05);
+    transform: translateY(-50%) scale(1.1);
 }
 
 /* Piano */
@@ -366,9 +366,9 @@ body {
     }
     
     :root {
-        --note-height: 25px;
-        --staff-line-spacing: 16px;
-        --piano-height: 280px;
+        --note-height: 20px;
+        --staff-line-spacing: 20px;
+        --piano-height: 250px;
     }
     
     .music-staff-container {
@@ -389,13 +389,24 @@ body {
     }
     
     .note-container {
-        left: 70px;
-        width: calc(100% - 80px);
+        position: absolute;
+        width: calc(100% - 100px);
+        height: 100%;
+        z-index: 2;
+        display: flex;
+        justify-content: center;
     }
-    
+
     .note {
-        width: calc(var(--note-height) * 2.5);
+        position: absolute;
+        width: var(--note-height);
         height: var(--note-height);
+        transition: transform 0.3s ease;
+        transform: translateY(-50%);
+    }
+
+    .note:hover {
+        transform: translateY(-50%) scale(1.1);
     }
     
     .piano {
@@ -455,9 +466,9 @@ body {
     }
     
     :root {
-        --note-height: 22px;
-        --staff-line-spacing: 14px;
-        --piano-height: 220px;
+        --note-height: 20px;
+        --staff-line-spacing: 20px;
+        --piano-height: 250px;
     }
     
     .music-staff-container {
@@ -479,8 +490,24 @@ body {
     }
     
     .note-container {
-        left: 55px;
-        width: calc(100% - 65px);
+        position: absolute;
+        width: calc(100% - 100px);
+        height: 100%;
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+    }
+
+    .note {
+        position: absolute;
+        width: var(--note-height);
+        height: var(--note-height);
+        transition: transform 0.3s ease;
+        transform: translateY(-50%);
+    }
+
+    .note:hover {
+        transform: translateY(-50%) scale(1.1);
     }
     
     .piano {
@@ -525,4 +552,14 @@ body {
     .music-staff-container {
         padding: 15px 15px;
     }
+}
+
+.ledger-line {
+    position: absolute;
+    width: calc(var(--note-height) * 1.6);
+    height: 3px;
+    background-color: var(--staff-color);
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
 }
